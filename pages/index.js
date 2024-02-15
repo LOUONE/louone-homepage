@@ -18,7 +18,7 @@ const Home = () => (
         bg={useColorModeValue('whiteAlpha.500', 'whiteAlpha.200')}
         css={{ backdropFilter: 'blur(10px)' }}
       >
-        Hello I'm a Computer Science student at Université de Montréal.
+        Hello I'm a Computer Science student at Université de Montréal
       </Box>
 
       <Box display={{ md: "flex" }}>
