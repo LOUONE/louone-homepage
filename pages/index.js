@@ -80,19 +80,19 @@ const Home = () => (
           Bio
         </Heading>
         <BioSection>
-          <BioYear>2001</BioYear>
+          <BioYear>Dec. 2001</BioYear>
           Born in France.
         </BioSection>
         <BioSection>
-          <BioYear>2022</BioYear>
+          <BioYear>Summer 2022</BioYear>
           Worked at Genetec as an Intern in a SOC
         </BioSection>
         <BioSection>
-          <BioYear>2023</BioYear>
+          <BioYear>Summer 2023 and 2024</BioYear>
           Worked at EY Montréal as an Intern in Banking Technology
         </BioSection>
         <BioSection>
-          <BioYear>2024</BioYear>
+          <BioYear>May 2025</BioYear>
           Completing the Bachelor&apos;s Program in Computer Science at Université de Montréal
         </BioSection>
       </Section>
@@ -102,11 +102,12 @@ const Home = () => (
           I ♥
         </Heading>
         <Paragraph>
-          Art, Music,{' '}
+        Cooking, Custom Keyboards, Algorithm competitions
+        , {' '}
           <Link href="https://flickr.com/photos/197481682@N03/" target="_blank">
             Photography
           </Link>
-          , Sports
+          , Sports (Surf, Boxing, Gym)
         </Paragraph>
       </Section>
 
