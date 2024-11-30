@@ -60,9 +60,7 @@ const Home = () => (
           Work
         </Heading>
         <Paragraph>
-        Louis is a French student living in Montreal since 2020, finishing his bachelor's degree in computer science with a gpa of 3.5/4.
-He is interested in cybersecurity and has taken part in several CTFs and Hackathons.
-He has also been able to develop his professional skills by accumulating over a year and a half of experience through numerous internships.
+        Louis, a French student living in Montreal since 2020, is finishing his bachelor's degree in computer science with a GPA of 3.5/4. He has a keen interest in cybersecurity, software development, and competitive programming. Louis has participated in several CTFs, hackathons, and a competitive algorithm club, showcasing his passion for tackling complex challenges. Additionally, he has honed his professional skills through over a year and a half of diverse internship experiences.
         </Paragraph>
         <Box align="center" my={4}>
           <Button
