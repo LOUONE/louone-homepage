@@ -106,11 +106,11 @@ const Home = () => (
           I ♥
         </Heading>
         <Paragraph>
-        Cooking, Custom Keyboards, Algorithm competitions,{' '}
+          Cooking, Custom Keyboards, Algorithm competitions,{' '}
           <Link href="https://flickr.com/photos/197481682@N03/" target="_blank">
             Photography
           </Link>
-          , Sports 
+          , Sports (Surf, Boxing, Gym)
         </Paragraph>
       </Section>
 
