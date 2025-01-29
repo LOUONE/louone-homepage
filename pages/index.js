@@ -96,7 +96,7 @@ const Home = () => (
           Worked at EY Montréal as an Intern in Banking Technology
         </BioSection>
         <BioSection>
-          <BioYear>2024</BioYear>
+          <BioYear>2025</BioYear>
           Completing the Bachelor&apos;s Program in Computer Science at Université de Montréal
         </BioSection>
       </Section>
