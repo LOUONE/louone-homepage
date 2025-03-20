@@ -1,30 +1,61 @@
-import { Container, Heading, SimpleGrid, Divider } from "@chakra-ui/react";
-import Section from "../components/section";
-import Paragraph from "../components/paragraph";
-import Layout from "../components/layouts/article";
+import { Container, Heading, SimpleGrid, Divider } from '@chakra-ui/react'
+import Layout from '../components/layouts/article'
+import Section from '../components/section'
+import { WorkGridItem } from '../components/grid-item'
+
+import thumbCodeLens from '../public/images/works/codelens_eyecatch.webp'
+import thumbRLAgent from '../public/images/works/rlagent_eyecatch.png'
+import thumbFridge from '../public/images/works/fridge_eyecatch.png'
 
 const Works = () => (
   <Layout title="Works">
     <Container>
       <Heading as="h3" fontSize={20} mb={4}>
-        Works
+        Featured Projects
       </Heading>
 
-      <Section delay={0.1}>
-        <Heading as="h3" variant="section-title">
-          Projects
-        </Heading>
-        <Paragraph>
-          <strong>Fridge2Recipe - React, MongoDB, SQL, REST APIs | PolyHack 2024 (Feb. 2024)</strong>
-          <ul>
-            <li>Developed an intuitive React frontend, improving user retention by 20%, enabling users to input as few as three ingredients and receive recipe suggestions with 98% accuracy.</li>
-            <li>Engineered a robust MongoDB and SQL-based backend, reducing average API response times by 25% and ensuring 99.9% uptime through the integration of external REST APIs for dynamic recipe data.</li>
-            <li>Optimized API performance and refined search algorithms, enhancing recommendation relevance by 15% and elevating overall user experience.</li>
-          </ul>
-        </Paragraph>
-      </Section>
+      <SimpleGrid
+        columns={[1, 1, 2]}
+        gap={6}
+        sx={{
+          '& > div': {
+            height: '100%'
+          }
+        }}
+      >
+        <Section height="100%">
+          <WorkGridItem 
+            id="gpt-codelens" 
+            title="GPT-CodeLens" 
+            thumbnail={thumbCodeLens}
+          >
+            Intelligent code review system using LLMs to provide contextual improvements
+            and catch complex issues
+          </WorkGridItem>
+        </Section>
+        <Section>
+          <WorkGridItem
+            id="rl-agentx"
+            title="RL-AgentX"
+            thumbnail={thumbRLAgent}
+          >
+            Adaptive game AI that evolves in real-time using deep reinforcement learning
+          </WorkGridItem>
+        </Section>
+
+        <Section delay={0.1}>
+          <WorkGridItem
+            id="fridge2recipe"
+            title="Fridge2Recipe"
+            thumbnail={thumbFridge}
+          >
+            Smart recipe recommendation system based on available ingredients
+          </WorkGridItem>
+        </Section>
+      </SimpleGrid>
     </Container>
   </Layout>
-);
+)
 
-export default Works;
+export default Works
+export { getServerSideProps } from '../components/chakra'

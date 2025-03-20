@@ -4,12 +4,14 @@
   "description": "Louis's portfolio",
   "homepage": "http://louone.github.io/",
   "scripts": {
-    "dev": "next dev -H 0.0.0.0",
+    "dev": "next dev -H 0.0.0.0 -p 3000",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "build": "next build",
     "prettier": "prettier -write .",
-    "lint": "next lint"
+    "lint": "next lint",
+    "start": "next dev",
+    "dev:turbo": "next dev --turbo"
   },
   "keywords": [],
   "author": "Louis Forrer <louis.forrer@umontreal.ca>",

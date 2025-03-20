@@ -1,1 +1,10 @@
-{"/_document":"pages/_document.js","/_app":"pages/_app.js","/_error":"pages/_error.js","/404":"pages/404.html","/":"pages/index.js"}
+{
+  "/_app": "pages/_app.js",
+  "/_error": "pages/_error.js",
+  "/_document": "pages/_document.js",
+  "/works": "pages/works.js",
+  "/": "pages/index.js",
+  "/works/gpt-codelens": "pages/works/gpt-codelens.js",
+  "/404": "pages/404.js",
+  "/works/rl-agentx": "pages/works/rl-agentx.js"
+}

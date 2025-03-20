@@ -1,9 +1,9 @@
 import styled from '@emotion/styled'
 
-const Paragraph = styled.p`
+const Paragraph = styled.div`
   text-align: justify;
   text-indent: 1em;
-  hyphens: auto;
+  margin-bottom: 1em;
 `
 
 export default Paragraph
