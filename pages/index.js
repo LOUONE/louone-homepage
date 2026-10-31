@@ -50,9 +50,10 @@ const Hero = () => (
           Louis <em>Forrer</em>
         </h1>
         <p className="hero-lede">
-          <strong>Cybersecurity consultant at EY in Geneva.</strong> I do forensics
-          and audits for Swiss banks, and I&apos;m part of the AI innovation push in our tech
-          consulting: trainings, new tools, and modernising how the job is done.
+          <strong>I work on cyber and AI at EY in Geneva, and I write a lot of code.</strong>{' '}
+          At work I build AI tools for our cyber practice and help modernise how
+          consulting gets done. After hours I ship software: a phishing classifier, trading systems
+          running 24/7.
         </p>
         <div className="actions">
           <Link href="/#work" className="btn btn-light">
@@ -79,7 +80,7 @@ const Facts = () => (
     <Reveal as="dl" className="facts">
       <div>
         <dt>Now</dt>
-        <dd>EY Switzerland, cybersecurity and AI innovation</dd>
+        <dd>EY Switzerland, Cyber & AI</dd>
       </div>
       <div>
         <dt>Before</dt>
@@ -90,8 +91,8 @@ const Facts = () => (
         <dd>BSc Computer Science, Université de Montréal</dd>
       </div>
       <div>
-        <dt>Speaks</dt>
-        <dd>French, English, some German</dd>
+        <dt>Builds with</dt>
+        <dd>Python, TypeScript, FastAPI, LLMs</dd>
       </div>
     </Reveal>
   </div>
@@ -229,7 +230,7 @@ const Work = () => (
 const Experience = () => (
   <section id="experience" className="section container">
     <SectionHead n="02" label="Experience">
-      Banks, audits and <em>a SOC</em>
+      Cyber, AI and <em>a lot of Python</em>
     </SectionHead>
     <ul className="jobs">
       {experience.map(job => (
@@ -350,7 +351,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Louis Forrer · Cybersecurity, Geneva</title>
+        <title>Louis Forrer · Cyber, AI & software, Geneva</title>
       </Head>
       <Hero />
       <Facts />

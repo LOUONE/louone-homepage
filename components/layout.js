@@ -68,7 +68,7 @@ export default function Layout({ children }) {
         <meta name="theme-color" content="#0b0b0c" />
         <meta
           name="description"
-          content="Louis Forrer, cybersecurity consultant at EY in Geneva. Forensics and audits for Swiss banks, and AI innovation in tech consulting."
+          content="Louis Forrer, Geneva. Cybersecurity and AI at EY Switzerland, and software built in Python and TypeScript."
         />
         <link rel="preload" as="image" href={paintings.hero.src} />
       </Head>
