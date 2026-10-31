@@ -1,137 +1,364 @@
-import { Container, Box, Heading, useColorModeValue, Link, Button } from "@chakra-ui/react";
-import { ChevronRightIcon, EmailIcon } from '@chakra-ui/icons'
-import Image from "next/image";
-import NextLink from 'next/link'
-import Paragraph from '../components/paragraph'
-import { BioSection, BioYear } from '../components/bio'
-import Section from '../components/section'
-import Layout from '../components/layouts/article'
+import { useEffect, useState } from 'react'
+import Head from 'next/head'
+import Link from 'next/link'
+import Image from 'next/image'
+import { AnimatePresence, motion } from 'framer-motion'
+import Dither from '../components/dither'
+import CopyEmail from '../components/copy-email'
+import { Card, Reveal, Terminal } from '../components/card'
+import {
+  profile,
+  paintings,
+  mailguard,
+  projects,
+  experience,
+  toolkit,
+  education,
+  certifications,
+  languages
+} from '../lib/data'
 
-const Home = () => (
-  <Layout>
-    <Container>
-      <Box
-        borderRadius="lg"
-        mb={6}
-        p={3}
-        textAlign="center"
-        bg={useColorModeValue('whiteAlpha.500', 'whiteAlpha.200')}
-        css={{ backdropFilter: 'blur(10px)' }}
-      >
-        Hello I'm a Computer Science student at Université de Montréal
-      </Box>
+const LocalTime = () => {
+  const [time, setTime] = useState(null)
 
-      <Box display={{ md: "flex" }}>
-        <Box flexGrow={1}>
-          <Heading as="h2" variant="page-tittle">
-            Louis Forrer
-          </Heading>
-          <p>Cybersecurity - Developer</p>
-          </Box>
-          <Box
-          flexShrink={0}
-          mt={{ base: 4, md: 0 }}
-          ml={{ md: 6 }}
-          textAlign="center"
-        >
-          
-          <Box
-            borderColor="whiteAlpha.800"
-            borderWidth={2}
-            borderStyle="solid"
-            w="100px"
-            h="100px"
-            display="inline-block"
-            borderRadius="full"
-            overflow="hidden"
-          >
-            <Image
-              src="/images/pdp.jpeg"
-              alt="Profile image"
-              width="100"
-              height="100"
-            />
-          </Box>
-        </Box>
-        </Box>
-        
-        <Section delay={0.1}>
-        <Heading as="h3" variant="section-title">
-          Work
-        </Heading>
-        <Paragraph>
-        Louis, a French student living in Montreal since 2020, is finishing his bachelor's degree in computer science with a GPA of 3.5/4. He has a keen interest in cybersecurity, software development, and competitive programming. Louis has participated in several CTFs, hackathons, and a competitive algorithm club, showcasing his passion for tackling complex challenges. Additionally, he has honed his professional skills through over a year and a half of diverse internship experiences.
-        </Paragraph>
-        <Box align="center" my={4}>
-          <Button
-            as={NextLink}
-            href="/works"
-            scroll={false}
-            rightIcon={<ChevronRightIcon />}
-            colorScheme="teal"
-          >
-            My portfolio
-          </Button>
-        </Box>
-      </Section>
+  useEffect(() => {
+    const fmt = new Intl.DateTimeFormat('en-GB', {
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZone: profile.timeZone,
+      timeZoneName: 'short'
+    })
+    const tick = () => setTime(fmt.format(new Date()))
+    tick()
+    const id = setInterval(tick, 15000)
+    return () => clearInterval(id)
+  }, [])
 
-      <Section delay={0.15}>
-        <Heading as="h3" variant="section-title">
-          Projects
-        </Heading>
-        <Paragraph>
-          <strong>Fridge2Recipe - React, MongoDB, SQL, REST APIs | PolyHack 2024 (Feb. 2024)</strong>
-          <ul>
-            <li>Developed an intuitive React frontend, improving user retention by 20%, enabling users to input as few as three ingredients and receive recipe suggestions with 98% accuracy.</li>
-            <li>Engineered a robust MongoDB and SQL-based backend, reducing average API response times by 25% and ensuring 99.9% uptime through the integration of external REST APIs for dynamic recipe data.</li>
-            <li>Optimized API performance and refined search algorithms, enhancing recommendation relevance by 15% and elevating overall user experience.</li>
-          </ul>
-        </Paragraph>
-      </Section>
+  return <span suppressHydrationWarning>{time ?? '--:--'}</span>
+}
 
-      <Section delay={0.2}>
-        <Heading as="h3" variant="section-title">
-          Bio
-        </Heading>
-        <BioSection>
-          <BioYear>2001</BioYear>
-          Born in France.
-        </BioSection>
-        <BioSection>
-          <BioYear>2022</BioYear>
-          Worked at Genetec as an Intern in a SOC
-        </BioSection>
-        <BioSection>
-          <BioYear>2023</BioYear>
-          Worked at EY Montréal as an Intern in Banking Technology
-        </BioSection>
-        <BioSection>
-          <BioYear>2024</BioYear>
-          Worked at EY Montréal as an Intern in Banking Technology
-        </BioSection>
-        <BioSection>
-          <BioYear>2025</BioYear>
-          Completing the Bachelor&apos;s Program in Computer Science at Université de Montréal
-        </BioSection>
-      </Section>
-
-      <Section delay={0.3}>
-        <Heading as="h3" variant="section-title">
-          I ♥
-        </Heading>
-        <Paragraph>
-          Cooking, Custom Keyboards, Algorithm competitions,{' '}
-          <Link href="https://flickr.com/photos/197481682@N03/" target="_blank">
-            Photography
+const Hero = () => (
+  <section className="hero">
+    <Dither src={paintings.hero.src} cell={6} radius={170} />
+    <div className="container hero-inner">
+      <Reveal className="hero-card" delay={0.3}>
+        <div className="hero-meta label">
+          <span className="live">{profile.location}</span>
+          <LocalTime />
+        </div>
+        <h1>
+          Louis <em>Forrer</em>
+        </h1>
+        <p className="hero-lede">
+          <strong>Cybersecurity consultant at EY in Geneva.</strong> I do forensics
+          and audits for Swiss banks, and I&apos;m part of the AI innovation push in our tech
+          consulting: trainings, new tools, and modernising how the job is done.
+        </p>
+        <div className="actions">
+          <Link href="/#work" className="btn btn-light">
+            See my work <span className="arrow">↓</span>
           </Link>
-          , Sports (Surf, Boxing, Gym)
-        </Paragraph>
-      </Section>
-
-      
-    </Container>
-  </Layout>
+          <a href={profile.links.linkedin} target="_blank" rel="noreferrer" className="btn">
+            LinkedIn ↗
+          </a>
+          <a href={profile.links.github} target="_blank" rel="noreferrer" className="btn">
+            GitHub ↗
+          </a>
+        </div>
+      </Reveal>
+    </div>
+    <p className="cartel">
+      {paintings.hero.caption}
+      <span>move your cursor to restore it</span>
+    </p>
+  </section>
 )
 
-export default Home
-export { getServerSideProps } from '../components/chakra'
+const Facts = () => (
+  <div className="container">
+    <Reveal as="dl" className="facts">
+      <div>
+        <dt>Now</dt>
+        <dd>EY Switzerland, cybersecurity and AI innovation</dd>
+      </div>
+      <div>
+        <dt>Before</dt>
+        <dd>EY Montréal, Genetec SOC</dd>
+      </div>
+      <div>
+        <dt>Studied</dt>
+        <dd>BSc Computer Science, Université de Montréal</dd>
+      </div>
+      <div>
+        <dt>Speaks</dt>
+        <dd>French, English, some German</dd>
+      </div>
+    </Reveal>
+  </div>
+)
+
+const SectionHead = ({ n, label, children }) => (
+  <Reveal className="section-head">
+    <span className="label">
+      <b>{n}</b> {label}
+    </span>
+    <h2 className="section-title">{children}</h2>
+  </Reveal>
+)
+
+const ProjectRow = ({ p }) => {
+  const [open, setOpen] = useState(false)
+  const id = `project-${p.title.replace(/\W+/g, '-').toLowerCase()}`
+  return (
+    <li>
+      <button
+        className="row-btn"
+        aria-expanded={open}
+        aria-controls={id}
+        onClick={() => setOpen(o => !o)}
+      >
+        <span className="row-year">
+          {p.year}
+          <br />
+          {p.kind}
+        </span>
+        <span>
+          <span className="row-title">{p.title}</span>
+          <span className="row-summary">{p.summary}</span>
+        </span>
+        <span className="row-toggle" aria-hidden>
+          +
+        </span>
+      </button>
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            id={id}
+            className="row-body"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <div className="row-body-inner">
+              <span />
+              <div>
+                <ul>
+                  {p.details.map(d => (
+                    <li key={d}>{d}</li>
+                  ))}
+                </ul>
+                <div className="chips">
+                  {p.stack.map(s => (
+                    <span key={s} className="chip">
+                      {s}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </li>
+  )
+}
+
+const Work = () => (
+  <section id="work" className="section container">
+    <SectionHead n="01" label="Work">
+      Things I build <em>after hours</em>
+    </SectionHead>
+
+    <Reveal>
+      <Card className="feature">
+        <div className="feature-copy">
+          <div className="feature-meta">
+            <span className="badge">Latest</span>
+            <span className="label">
+              {mailguard.year} · {mailguard.kind}
+            </span>
+          </div>
+          <h3>{mailguard.title}</h3>
+          <p>{mailguard.tagline}</p>
+          <div className="chips">
+            {mailguard.stack.map(t => (
+              <span key={t} className="chip">
+                {t}
+              </span>
+            ))}
+          </div>
+          <div className="feature-links">
+            <Link href={`/work/${mailguard.slug}`} className="btn btn-light">
+              Read the case study <span className="arrow">→</span>
+            </Link>
+            <a href={mailguard.repo} target="_blank" rel="noreferrer" className="btn">
+              Source ↗
+            </a>
+          </div>
+        </div>
+        <Terminal title="mailguard — ./score.sh">
+          <Image
+            src="/images/work/mailguard/demo.gif"
+            alt="A terminal scores two made-up emails with the mailguard API: a PayPal lure is labelled phishing, a colleague's reply is labelled legitimate."
+            width={1100}
+            height={720}
+            unoptimized
+          />
+        </Terminal>
+      </Card>
+    </Reveal>
+
+    <Reveal className="stats">
+      {mailguard.stats.map(s => (
+        <div key={s.label} className="stat">
+          <span className="stat-value">{s.value}</span>
+          <span className="stat-label">{s.label}</span>
+        </div>
+      ))}
+    </Reveal>
+
+    <Reveal as="ul" className="rows">
+      {projects.map(p => (
+        <ProjectRow key={p.title} p={p} />
+      ))}
+    </Reveal>
+  </section>
+)
+
+const Experience = () => (
+  <section id="experience" className="section container">
+    <SectionHead n="02" label="Experience">
+      Banks, audits and <em>a SOC</em>
+    </SectionHead>
+    <ul className="jobs">
+      {experience.map(job => (
+        <Reveal as="li" key={job.company + job.period} className="job">
+          <div className="job-when">
+            <b>{job.company}</b>
+            {job.place}
+            <br />
+            {job.period}
+            {job.current && (
+              <>
+                <br />
+                <span className="badge job-now">Current</span>
+              </>
+            )}
+          </div>
+          <div>
+            <h3>{job.role}</h3>
+            <ul>
+              {job.points.map(pt => (
+                <li key={pt}>{pt}</li>
+              ))}
+            </ul>
+          </div>
+        </Reveal>
+      ))}
+    </ul>
+  </section>
+)
+
+const Toolkit = () => (
+  <section id="toolkit" className="section container">
+    <SectionHead n="03" label="Toolkit">
+      What I work with
+    </SectionHead>
+    <Reveal className="toolkit">
+      {toolkit.map(g => (
+        <div key={g.group} className="tool-group">
+          <span className="label">{g.group}</span>
+          <ul>
+            {g.items.map(i => (
+              <li key={i}>{i}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </Reveal>
+  </section>
+)
+
+const Education = () => (
+  <section className="section container" style={{ paddingTop: 0 }}>
+    <SectionHead n="04" label="Education">
+      School and paper
+    </SectionHead>
+    <div className="edu">
+      <Reveal>
+        <Card style={{ height: '100%' }}>
+          <span className="label">{education.period}</span>
+          <h3>{education.degree}</h3>
+          <p>{education.school}</p>
+          <ul>
+            {education.notes.map(n => (
+              <li key={n}>{n}</li>
+            ))}
+          </ul>
+        </Card>
+      </Reveal>
+      <Reveal delay={0.05}>
+        <Card style={{ height: '100%' }}>
+          <span className="label">Certification</span>
+          {certifications.map(c => (
+            <div key={c.name}>
+              <h3>{c.name}</h3>
+              <p>{c.detail}</p>
+            </div>
+          ))}
+        </Card>
+      </Reveal>
+      <Reveal delay={0.1}>
+        <Card style={{ height: '100%' }}>
+          <span className="label">Languages</span>
+          <ul>
+            {languages.map(l => (
+              <li key={l.name}>
+                {l.name} <span>{l.level}</span>
+              </li>
+            ))}
+          </ul>
+        </Card>
+      </Reveal>
+    </div>
+  </section>
+)
+
+const Contact = () => (
+  <section id="contact" className="contact">
+    <Dither src={paintings.dusk.src} cell={7} radius={150} />
+    <div className="container">
+      <Reveal className="hero-card">
+        <span className="label">
+          <b>05</b> Contact
+        </span>
+        <h2>Say hello</h2>
+        <p>The quickest way to reach me is email. Click to copy it.</p>
+        <div className="actions">
+          <CopyEmail className="btn btn-light" />
+          <a href={profile.links.linkedin} target="_blank" rel="noreferrer" className="btn">
+            LinkedIn ↗
+          </a>
+        </div>
+      </Reveal>
+    </div>
+  </section>
+)
+
+export default function Home() {
+  return (
+    <>
+      <Head>
+        <title>Louis Forrer · Cybersecurity, Geneva</title>
+      </Head>
+      <Hero />
+      <Facts />
+      <Work />
+      <Experience />
+      <Toolkit />
+      <Education />
+      <Contact />
+    </>
+  )
+}

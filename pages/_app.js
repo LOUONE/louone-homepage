@@ -1,33 +1,25 @@
-import Layout from '../components/layouts/main'
-import Fonts from '../components/fonts'
-import { AnimatePresence } from 'framer-motion'
-import Chakra from '../components/chakra'
+import { AnimatePresence, MotionConfig, motion } from 'framer-motion'
 import { Analytics } from '@vercel/analytics/react'
+import Layout from '../components/layout'
+import '../styles/globals.css'
 
-if (typeof window !== 'undefined') {
-  window.history.scrollRestoration = 'manual'
-}
-
-function Website({ Component, pageProps, router }) {
+export default function Website({ Component, pageProps, router }) {
   return (
-    <Chakra cookies={pageProps.cookies}>
-      <Fonts />
-      <Layout router={router}>
-        <AnimatePresence
-          mode="wait"
-          initial={true}
-          onExitComplete={() => {
-            if (typeof window !== 'undefined') {
-              window.scrollTo({ top: 0 })
-            }
-          }}
-        >
-          <Component {...pageProps} key={router.route} />
+    <MotionConfig reducedMotion="user">
+      <Layout>
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={router.route}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.25, ease: 'easeOut' }}
+          >
+            <Component {...pageProps} />
+          </motion.div>
         </AnimatePresence>
-        <Analytics />
       </Layout>
-    </Chakra>
+      <Analytics />
+    </MotionConfig>
   )
 }
-
-export default Website
