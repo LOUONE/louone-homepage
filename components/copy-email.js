@@ -27,7 +27,7 @@ export const Toast = ({ show, children }) => (
   </AnimatePresence>
 )
 
-export default function CopyEmail({ className = 'btn' }) {
+export default function CopyEmail({ className = '', label = profile.email }) {
   const [copied, setCopied] = useState(false)
 
   const onClick = async () => {
@@ -41,8 +41,14 @@ export default function CopyEmail({ className = 'btn' }) {
 
   return (
     <>
-      <button type="button" className={`${className} copy-btn`} data-copied={copied} onClick={onClick}>
-        {copied ? 'Copied ✓' : profile.email}
+      <button
+        type="button"
+        className={className}
+        data-copied={copied}
+        onClick={onClick}
+        title="Copy email address"
+      >
+        {label}
       </button>
       <Toast show={copied}>Email copied to clipboard</Toast>
     </>

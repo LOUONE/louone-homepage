@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { AnimatePresence, motion } from 'framer-motion'
 import Dither from '../components/dither'
 import CopyEmail from '../components/copy-email'
-import { Card, Reveal, Terminal } from '../components/card'
+import { Reveal, Terminal } from '../components/card'
 import {
   profile,
   paintings,
@@ -25,8 +25,7 @@ const LocalTime = () => {
     const fmt = new Intl.DateTimeFormat('en-GB', {
       hour: '2-digit',
       minute: '2-digit',
-      timeZone: profile.timeZone,
-      timeZoneName: 'short'
+      timeZone: profile.timeZone
     })
     const tick = () => setTime(fmt.format(new Date()))
     tick()
@@ -34,77 +33,68 @@ const LocalTime = () => {
     return () => clearInterval(id)
   }, [])
 
-  return <span suppressHydrationWarning>{time ?? '--:--'}</span>
+  return (
+    <span className="clock" suppressHydrationWarning>
+      {time ?? '--:--'}
+    </span>
+  )
 }
 
 const Hero = () => (
   <section className="hero">
-    <Dither src={paintings.hero.src} cell={6} radius={170} />
-    <div className="container hero-inner">
-      <Reveal className="hero-card" delay={0.3}>
-        <div className="hero-meta label">
-          <span className="live">{profile.location}</span>
-          <LocalTime />
-        </div>
-        <h1>
-          Louis <em>Forrer</em>
-        </h1>
+    <Dither src={paintings.hero.src} cell={6} radius={170} text={profile.name} textTop={84} dissolve />
+    <h1 className="sr-only">{profile.name}</h1>
+    <div className="container hero-bottom">
+      <Reveal delay={0.6}>
         <p className="hero-lede">
           <strong>I work on cyber and AI at EY in Geneva, and I write a lot of code.</strong>{' '}
-          At work I build AI tools for our cyber practice and help modernise how
-          consulting gets done. After hours I ship software: a phishing classifier, trading systems
+          At work I build AI tools for our cyber practice and help modernise how consulting
+          gets done. After hours I ship software: a phishing classifier, trading systems
           running 24/7.
         </p>
-        <div className="actions">
-          <Link href="/#work" className="btn btn-light">
-            See my work <span className="arrow">↓</span>
+      </Reveal>
+      <Reveal delay={0.75} className="hero-side">
+        <nav className="hero-links" aria-label="Elsewhere">
+          <Link href="/#work" className="link">
+            Work ↓
           </Link>
-          <a href={profile.links.linkedin} target="_blank" rel="noreferrer" className="btn">
+          <a href={profile.links.linkedin} target="_blank" rel="noreferrer" className="link">
             LinkedIn ↗
           </a>
-          <a href={profile.links.github} target="_blank" rel="noreferrer" className="btn">
+          <a href={profile.links.github} target="_blank" rel="noreferrer" className="link">
             GitHub ↗
           </a>
-        </div>
+        </nav>
+        <p className="cartel">
+          {paintings.hero.caption}. Geneva, <LocalTime />.{' '}
+          <em>Move your cursor to clean the canvas.</em>
+        </p>
       </Reveal>
     </div>
-    <p className="cartel">
-      {paintings.hero.caption}
-      <span>move your cursor to restore it</span>
-    </p>
   </section>
 )
 
-const Facts = () => (
-  <div className="container">
-    <Reveal as="dl" className="facts">
-      <div>
-        <dt>Now</dt>
-        <dd>EY Switzerland, Cyber & AI</dd>
-      </div>
-      <div>
-        <dt>Before</dt>
-        <dd>EY Montréal, Genetec SOC</dd>
-      </div>
-      <div>
-        <dt>Studied</dt>
-        <dd>BSc Computer Science, Université de Montréal</dd>
-      </div>
-      <div>
-        <dt>Builds with</dt>
-        <dd>Python, TypeScript, FastAPI, LLMs</dd>
-      </div>
+const Statement = () => (
+  <section className="container statement">
+    <Reveal as="p">
+      <b>Consultant at EY Switzerland,</b> on cybersecurity and AI.{' '}
+      <b>Before that:</b> two summers at EY Montréal, a SOC at Genetec and a computer
+      science degree at the Université de Montréal. <b>I like problems that end with
+      something running.</b>
     </Reveal>
-  </div>
+  </section>
 )
 
-const SectionHead = ({ n, label, children }) => (
-  <Reveal className="section-head">
-    <span className="label">
-      <b>{n}</b> {label}
-    </span>
-    <h2 className="section-title">{children}</h2>
-  </Reveal>
+const Block = ({ id, title, note, children }) => (
+  <section id={id} className="container">
+    <div className="block">
+      <Reveal className="block-head">
+        <h2>{title}</h2>
+        {note && <p>{note}</p>}
+      </Reveal>
+      <div>{children}</div>
+    </div>
+  </section>
 )
 
 const ProjectRow = ({ p }) => {
@@ -118,18 +108,14 @@ const ProjectRow = ({ p }) => {
         aria-controls={id}
         onClick={() => setOpen(o => !o)}
       >
-        <span className="row-year">
-          {p.year}
-          <br />
-          {p.kind}
+        <span className="row-title">{p.title}</span>
+        <span className="row-meta">
+          {p.kind}, {p.year}
+          <span className="row-toggle" aria-hidden>
+            +
+          </span>
         </span>
-        <span>
-          <span className="row-title">{p.title}</span>
-          <span className="row-summary">{p.summary}</span>
-        </span>
-        <span className="row-toggle" aria-hidden>
-          +
-        </span>
+        <span className="row-summary">{p.summary}</span>
       </button>
       <AnimatePresence initial={false}>
         {open && (
@@ -142,21 +128,12 @@ const ProjectRow = ({ p }) => {
             transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
           >
             <div className="row-body-inner">
-              <span />
-              <div>
-                <ul>
-                  {p.details.map(d => (
-                    <li key={d}>{d}</li>
-                  ))}
-                </ul>
-                <div className="chips">
-                  {p.stack.map(s => (
-                    <span key={s} className="chip">
-                      {s}
-                    </span>
-                  ))}
-                </div>
-              </div>
+              <ul className="dash">
+                {p.details.map(d => (
+                  <li key={d}>{d}</li>
+                ))}
+              </ul>
+              <p className="stack">{p.stack.join(', ')}</p>
             </div>
           </motion.div>
         )}
@@ -166,55 +143,40 @@ const ProjectRow = ({ p }) => {
 }
 
 const Work = () => (
-  <section id="work" className="section container">
-    <SectionHead n="01" label="Work">
-      Things I build <em>after hours</em>
-    </SectionHead>
-
-    <Reveal>
-      <Card className="feature">
-        <div className="feature-copy">
-          <div className="feature-meta">
-            <span className="badge">Latest</span>
-            <span className="label">
-              {mailguard.year} · {mailguard.kind}
-            </span>
-          </div>
-          <h3>{mailguard.title}</h3>
-          <p>{mailguard.tagline}</p>
-          <div className="chips">
-            {mailguard.stack.map(t => (
-              <span key={t} className="chip">
-                {t}
-              </span>
-            ))}
-          </div>
-          <div className="feature-links">
-            <Link href={`/work/${mailguard.slug}`} className="btn btn-light">
-              Read the case study <span className="arrow">→</span>
-            </Link>
-            <a href={mailguard.repo} target="_blank" rel="noreferrer" className="btn">
-              Source ↗
-            </a>
-          </div>
+  <Block id="work" title="Work" note="Things I build on my own time. The day job is under Experience.">
+    <Reveal className="feature">
+      <div>
+        <p className="feature-meta">
+          {mailguard.kind}, {mailguard.year}
+        </p>
+        <h3>{mailguard.title}</h3>
+        <p>{mailguard.tagline}</p>
+        <p className="stack">{mailguard.stack.join(', ')}</p>
+        <div className="feature-links">
+          <Link href={`/work/${mailguard.slug}`} className="link">
+            Read the case study →
+          </Link>
+          <a href={mailguard.repo} target="_blank" rel="noreferrer" className="link">
+            Source ↗
+          </a>
         </div>
-        <Terminal title="mailguard — ./score.sh">
-          <Image
-            src="/images/work/mailguard/demo.gif"
-            alt="A terminal scores two made-up emails with the mailguard API: a PayPal lure is labelled phishing, a colleague's reply is labelled legitimate."
-            width={1100}
-            height={720}
-            unoptimized
-          />
-        </Terminal>
-      </Card>
+      </div>
+      <Terminal title="mailguard — ./score.sh">
+        <Image
+          src="/images/work/mailguard/demo.gif"
+          alt="A terminal scores two made-up emails with the mailguard API: a PayPal lure is labelled phishing, a colleague's reply is labelled legitimate."
+          width={1100}
+          height={720}
+          unoptimized
+        />
+      </Terminal>
     </Reveal>
 
-    <Reveal className="stats">
+    <Reveal className="numbers">
       {mailguard.stats.map(s => (
-        <div key={s.label} className="stat">
-          <span className="stat-value">{s.value}</span>
-          <span className="stat-label">{s.label}</span>
+        <div key={s.label}>
+          <b>{s.value}</b>
+          <span>{s.label}</span>
         </div>
       ))}
     </Reveal>
@@ -224,52 +186,38 @@ const Work = () => (
         <ProjectRow key={p.title} p={p} />
       ))}
     </Reveal>
-  </section>
+  </Block>
 )
 
 const Experience = () => (
-  <section id="experience" className="section container">
-    <SectionHead n="02" label="Experience">
-      Cyber, AI and <em>a lot of Python</em>
-    </SectionHead>
+  <Block id="experience" title="Experience">
     <ul className="jobs">
       {experience.map(job => (
         <Reveal as="li" key={job.company + job.period} className="job">
-          <div className="job-when">
-            <b>{job.company}</b>
-            {job.place}
-            <br />
-            {job.period}
-            {job.current && (
-              <>
-                <br />
-                <span className="badge job-now">Current</span>
-              </>
-            )}
+          <div className="job-head">
+            <h3>{job.company}</h3>
+            <span className="job-when">
+              {job.place}, {job.current ? <span className="now">{job.period}</span> : job.period}
+            </span>
           </div>
-          <div>
-            <h3>{job.role}</h3>
-            <ul>
-              {job.points.map(pt => (
-                <li key={pt}>{pt}</li>
-              ))}
-            </ul>
-          </div>
+          <p className="job-role">{job.role}</p>
+          <ul className="dash">
+            {job.points.map(pt => (
+              <li key={pt}>{pt}</li>
+            ))}
+          </ul>
         </Reveal>
       ))}
     </ul>
-  </section>
+  </Block>
 )
 
 const Toolkit = () => (
-  <section id="toolkit" className="section container">
-    <SectionHead n="03" label="Toolkit">
-      What I work with
-    </SectionHead>
-    <Reveal className="toolkit">
+  <Block id="toolkit" title="Toolkit">
+    <Reveal className="columns">
       {toolkit.map(g => (
-        <div key={g.group} className="tool-group">
-          <span className="label">{g.group}</span>
+        <div key={g.group}>
+          <h3>{g.group}</h3>
           <ul>
             {g.items.map(i => (
               <li key={i}>{i}</li>
@@ -278,70 +226,66 @@ const Toolkit = () => (
         </div>
       ))}
     </Reveal>
-  </section>
+  </Block>
 )
 
 const Education = () => (
-  <section className="section container" style={{ paddingTop: 0 }}>
-    <SectionHead n="04" label="Education">
-      School and paper
-    </SectionHead>
-    <div className="edu">
-      <Reveal>
-        <Card style={{ height: '100%' }}>
-          <span className="label">{education.period}</span>
-          <h3>{education.degree}</h3>
-          <p>{education.school}</p>
-          <ul>
-            {education.notes.map(n => (
-              <li key={n}>{n}</li>
-            ))}
-          </ul>
-        </Card>
-      </Reveal>
-      <Reveal delay={0.05}>
-        <Card style={{ height: '100%' }}>
-          <span className="label">Certification</span>
-          {certifications.map(c => (
-            <div key={c.name}>
-              <h3>{c.name}</h3>
-              <p>{c.detail}</p>
-            </div>
+  <Block id="education" title="Education">
+    <Reveal className="columns">
+      <div>
+        <h3>{education.period}</h3>
+        <p>
+          <strong>{education.degree}</strong>
+          {education.school}
+        </p>
+        <ul>
+          {education.notes.map(n => (
+            <li key={n}>{n}</li>
           ))}
-        </Card>
-      </Reveal>
-      <Reveal delay={0.1}>
-        <Card style={{ height: '100%' }}>
-          <span className="label">Languages</span>
-          <ul>
-            {languages.map(l => (
-              <li key={l.name}>
-                {l.name} <span>{l.level}</span>
-              </li>
-            ))}
-          </ul>
-        </Card>
-      </Reveal>
-    </div>
-  </section>
+        </ul>
+      </div>
+      <div>
+        <h3>Certification</h3>
+        {certifications.map(c => (
+          <p key={c.name}>
+            <strong>{c.name}</strong>
+            {c.detail}
+          </p>
+        ))}
+      </div>
+      <div>
+        <h3>Languages</h3>
+        <ul>
+          {languages.map(l => (
+            <li key={l.name}>
+              {l.name}, {l.level}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </Reveal>
+  </Block>
 )
 
 const Contact = () => (
-  <section id="contact" className="contact">
-    <Dither src={paintings.dusk.src} cell={7} radius={150} />
-    <div className="container">
-      <Reveal className="hero-card">
-        <span className="label">
-          <b>05</b> Contact
-        </span>
-        <h2>Say hello</h2>
-        <p>The quickest way to reach me is email. Click to copy it.</p>
-        <div className="actions">
-          <CopyEmail className="btn btn-light" />
-          <a href={profile.links.linkedin} target="_blank" rel="noreferrer" className="btn">
+  <section id="contact">
+    <div className="band">
+      <Dither src={paintings.dusk.src} cell={6} radius={150} text="Get in touch" textCenter />
+    </div>
+    <div className="container contact">
+      <Reveal as="p" className="contact-mail">
+        <CopyEmail />
+      </Reveal>
+      <Reveal className="contact-row">
+        <span>Click the address to copy it. Based in Geneva.</span>
+        <nav>
+          <a href={profile.links.linkedin} target="_blank" rel="noreferrer" className="link">
             LinkedIn ↗
           </a>
-        </div>
+          <a href={profile.links.github} target="_blank" rel="noreferrer" className="link">
+            GitHub ↗
+          </a>
+        </nav>
       </Reveal>
     </div>
   </section>
@@ -354,7 +298,7 @@ export default function Home() {
         <title>Louis Forrer · Cyber, AI & software, Geneva</title>
       </Head>
       <Hero />
-      <Facts />
+      <Statement />
       <Work />
       <Experience />
       <Toolkit />

@@ -2,7 +2,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 import Image from 'next/image'
 import Dither from '../../components/dither'
-import { Card, Reveal, Terminal } from '../../components/card'
+import { Reveal, Terminal } from '../../components/card'
 import { mailguard as project, paintings } from '../../lib/data'
 
 const points = [
@@ -32,6 +32,17 @@ const points = [
   }
 ]
 
+const Block = ({ title, children }) => (
+  <section className="container">
+    <div className="block">
+      <Reveal className="block-head">
+        <h2>{title}</h2>
+      </Reveal>
+      <div>{children}</div>
+    </div>
+  </section>
+)
+
 export default function Mailguard() {
   return (
     <>
@@ -42,20 +53,18 @@ export default function Mailguard() {
       </Head>
 
       <div className="case-band">
-        <Dither src={paintings.dusk.src} cell={6} radius={140} />
+        <Dither src={paintings.dusk.src} cell={6} radius={140} text="mailguard" textTop={84} />
       </div>
+      <h1 className="sr-only">mailguard</h1>
 
       <section className="case-hero container">
         <Reveal className="crumbs">
-          <Link href="/">home</Link> / <Link href="/#work">work</Link> / mailguard
+          <Link href="/">Home</Link> / <Link href="/#work">Work</Link> / mailguard
         </Reveal>
-        <Reveal delay={0.05}>
-          <h1>mailguard</h1>
+        <Reveal as="p" delay={0.05} className="lede">
+          {project.tagline}
         </Reveal>
-        <Reveal delay={0.1}>
-          <p className="lede">{project.tagline}</p>
-        </Reveal>
-        <Reveal delay={0.15} as="dl" className="facts">
+        <Reveal delay={0.1} as="dl" className="facts">
           <div>
             <dt>Year</dt>
             <dd>{project.year}</dd>
@@ -92,22 +101,20 @@ export default function Mailguard() {
             />
           </Terminal>
         </Reveal>
-        <Reveal className="stats">
+        <Reveal className="numbers">
           {project.stats.map(s => (
-            <div key={s.label} className="stat">
-              <span className="stat-value">{s.value}</span>
-              <span className="stat-label">{s.label}</span>
+            <div key={s.label}>
+              <b>{s.value}</b>
+              <span>{s.label}</span>
             </div>
           ))}
         </Reveal>
       </section>
 
-      <section className="section container">
+      <div style={{ height: 64 }} />
+
+      <Block title="Why">
         <Reveal className="prose">
-          <span className="label">
-            <b>01</b> Why
-          </span>
-          <h2>A good score is the easy part</h2>
           <p>
             Most phishing classifiers stop at one accuracy number. I wanted to know whether
             that number <strong>holds up in a real inbox</strong>, and whether someone can
@@ -122,14 +129,10 @@ export default function Mailguard() {
             </li>
           ))}
         </Reveal>
-      </section>
+      </Block>
 
-      <section className="section container">
+      <Block title="Architecture">
         <Reveal className="prose">
-          <span className="label">
-            <b>02</b> Architecture
-          </span>
-          <h2>Training, scoring, monitoring</h2>
           <p>
             Training and retraining feed an MLflow production alias behind a significance
             gate. The online path parses the email, scores it with LightGBM and TreeSHAP,
@@ -138,48 +141,39 @@ export default function Mailguard() {
           </p>
         </Reveal>
         <Reveal as="figure" className="figure">
-          <Card className="frame">
-            <Image
-              src="/images/work/mailguard/architecture-dark.png"
-              alt="Architecture: training and retraining with grouped splits, calibration and a significance gate feed the online FastAPI path, which feeds Prometheus, Grafana and a drift job."
-              width={2168}
-              height={1768}
-              sizes="(max-width: 1120px) 100vw, 1040px"
-            />
-          </Card>
-          <figcaption>Fig. 1 · System architecture, drawn in Mermaid</figcaption>
+          <Image
+            src="/images/work/mailguard/architecture-dark.png"
+            alt="Architecture: training and retraining with grouped splits, calibration and a significance gate feed the online FastAPI path, which feeds Prometheus, Grafana and a drift job."
+            width={2168}
+            height={1768}
+            sizes="(max-width: 860px) 100vw, 820px"
+          />
+          <figcaption>System architecture, drawn in Mermaid.</figcaption>
         </Reveal>
 
-        <Reveal className="prose" style={{ marginTop: 64 }}>
-          <h2>What the API returns</h2>
+        <Reveal className="prose" style={{ marginTop: 56 }}>
           <p>
-            The contract is versioned, and every response says <strong>why</strong>, so a
-            mail client could show the reasoning to whoever is reading.
+            The API contract is versioned, and every response says <strong>why</strong>, so
+            a mail client could show the reasoning to whoever is reading.
           </p>
         </Reveal>
-        <Reveal>
-          <Card as="pre" className="code">
-            <span className="c"># POST /v1/predict</span>
-            {'\n'}
-            {'{\n'}
-            {'  '}<span className="k">&quot;label&quot;</span>: <span className="s">&quot;phishing&quot;</span>,{'\n'}
-            {'  '}<span className="k">&quot;probability&quot;</span>: 0.9184,{'\n'}
-            {'  '}<span className="k">&quot;reasons&quot;</span>: [{'\n'}
-            {'    '}{'{ '}<span className="k">&quot;feature&quot;</span>: <span className="s">&quot;display_name_brand_mismatch&quot;</span>, <span className="k">&quot;contribution&quot;</span>: 1.91 {'}'},{'\n'}
-            {'    '}{'{ '}<span className="k">&quot;feature&quot;</span>: <span className="s">&quot;subject_credential_cues&quot;</span>, <span className="k">&quot;contribution&quot;</span>: 1.63 {'}'},{'\n'}
-            {'    '}<span className="c">…</span>{'\n'}
-            {'  ]\n'}
-            {'}'}
-          </Card>
+        <Reveal as="pre" className="code">
+          <span className="c"># POST /v1/predict</span>
+          {'\n'}
+          {'{\n'}
+          {'  '}<span className="k">&quot;label&quot;</span>: <span className="s">&quot;phishing&quot;</span>,{'\n'}
+          {'  '}<span className="k">&quot;probability&quot;</span>: 0.9184,{'\n'}
+          {'  '}<span className="k">&quot;reasons&quot;</span>: [{'\n'}
+          {'    '}{'{ '}<span className="k">&quot;feature&quot;</span>: <span className="s">&quot;display_name_brand_mismatch&quot;</span>, <span className="k">&quot;contribution&quot;</span>: 1.91 {'}'},{'\n'}
+          {'    '}{'{ '}<span className="k">&quot;feature&quot;</span>: <span className="s">&quot;subject_credential_cues&quot;</span>, <span className="k">&quot;contribution&quot;</span>: 1.63 {'}'},{'\n'}
+          {'    '}<span className="c">…</span>{'\n'}
+          {'  ]\n'}
+          {'}'}
         </Reveal>
-      </section>
+      </Block>
 
-      <section className="section container">
+      <Block title="Monitoring">
         <Reveal className="prose">
-          <span className="label">
-            <b>03</b> Monitoring
-          </span>
-          <h2>The alerts in this screenshot are real</h2>
           <p>
             The demo traffic is mostly short personal mail, so the dashboard shows a high
             phishing rate and a drift alert. That is not a bug: this traffic looks nothing
@@ -188,38 +182,33 @@ export default function Mailguard() {
           </p>
         </Reveal>
         <Reveal as="figure" className="figure">
-          <Card className="frame">
-            <Image
-              src="/images/work/mailguard/grafana-dark.png"
-              alt="The mailguard Grafana dashboard: model version, readiness, request rate, predicted phishing rate, latency percentiles, score distribution and drift status."
-              width={1600}
-              height={1440}
-              sizes="(max-width: 1120px) 100vw, 1040px"
-            />
-          </Card>
-          <figcaption>Fig. 2 · Grafana dashboard from make demo</figcaption>
+          <Image
+            src="/images/work/mailguard/grafana-dark.png"
+            alt="The mailguard Grafana dashboard: model version, readiness, request rate, predicted phishing rate, latency percentiles, score distribution and drift status."
+            width={1600}
+            height={1440}
+            sizes="(max-width: 860px) 100vw, 820px"
+          />
+          <figcaption>Grafana dashboard from make demo.</figcaption>
         </Reveal>
-      </section>
+      </Block>
 
-      <section className="section container" style={{ paddingTop: 0 }}>
+      <Block title="Run it">
         <Reveal>
-          <Card className="end-card">
-            <span className="label">Run it</span>
-            <h2>
-              <code>make demo</code>
-            </h2>
-            <p>Only Docker needed. The API, Grafana, Prometheus and MLflow start together.</p>
-            <div className="actions">
-              <a href={project.repo} target="_blank" rel="noreferrer" className="btn btn-light">
-                View on GitHub <span className="arrow">→</span>
-              </a>
-              <Link href="/" className="btn">
-                ← Home
-              </Link>
-            </div>
-          </Card>
+          <p className="run">make demo</p>
+          <p className="prose" style={{ marginTop: 12, color: 'var(--muted)' }}>
+            Only Docker needed. The API, Grafana, Prometheus and MLflow start together.
+          </p>
+          <div className="feature-links">
+            <a href={project.repo} target="_blank" rel="noreferrer" className="link">
+              View on GitHub ↗
+            </a>
+            <Link href="/" className="link">
+              ← Back home
+            </Link>
+          </div>
         </Reveal>
-      </section>
+      </Block>
     </>
   )
 }

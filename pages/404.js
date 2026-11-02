@@ -11,7 +11,7 @@ export default function NotFound() {
       <p>
         Nothing here. The lake is still there though.
       </p>
-      <Link href="/" className="btn">
+      <Link href="/" className="link">
         ← Back home
       </Link>
     </section>

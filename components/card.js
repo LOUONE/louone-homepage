@@ -1,21 +1,5 @@
 import { motion } from 'framer-motion'
 
-// Tracks the pointer so the radial highlight in .card::before follows it
-const track = e => {
-  const r = e.currentTarget.getBoundingClientRect()
-  e.currentTarget.style.setProperty('--mx', `${e.clientX - r.left}px`)
-  e.currentTarget.style.setProperty('--my', `${e.clientY - r.top}px`)
-}
-
-export const Card = ({ as = 'div', className = '', children, ...props }) => {
-  const Tag = as
-  return (
-    <Tag className={`card ${className}`} onMouseMove={track} {...props}>
-      {children}
-    </Tag>
-  )
-}
-
 export const Reveal = ({ children, delay = 0, as = 'div', ...props }) => {
   const Tag = motion[as]
   return (

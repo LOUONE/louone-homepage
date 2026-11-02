@@ -1,12 +1,16 @@
 import { useEffect, useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import CommandPalette from './command-palette'
 import { profile, paintings } from '../lib/data'
 
 const Nav = ({ onOpenPalette }) => {
   const [scrolled, setScrolled] = useState(false)
   const [mac, setMac] = useState(true)
+  // On the home page the name is already painted into the hero, so the
+  // brand only fades in once you scroll past it
+  const solid = useRouter().pathname !== '/'
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
@@ -17,10 +21,10 @@ const Nav = ({ onOpenPalette }) => {
   }, [])
 
   return (
-    <header className={`nav ${scrolled ? 'scrolled' : ''}`}>
+    <header className={`nav ${scrolled ? 'scrolled' : ''} ${solid ? 'solid' : ''}`}>
       <div className="container nav-inner">
         <Link href="/" className="brand" aria-label="Home">
-          Louis Forrer<i>.</i>
+          Louis Forrer
         </Link>
         <nav className="nav-links">
           <Link href="/#work">Work</Link>
@@ -43,8 +47,8 @@ const Nav = ({ onOpenPalette }) => {
 const Footer = () => (
   <footer className="footer">
     <div className="container footer-inner">
-      <span>© {new Date().getFullYear()} {profile.name} · Geneva</span>
-      <span>Paintings: Ferdinand Hodler, public domain</span>
+      <span>© {new Date().getFullYear()} {profile.name}, Geneva</span>
+      <span>Paintings by Ferdinand Hodler (public domain). Set in Schibsted Grotesk.</span>
       <span>
         <a href={profile.links.github} target="_blank" rel="noreferrer">
           GitHub
@@ -65,7 +69,7 @@ export default function Layout({ children }) {
     <>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="theme-color" content="#0b0b0c" />
+        <meta name="theme-color" content="#0a0a0a" />
         <meta
           name="description"
           content="Louis Forrer, Geneva. Cybersecurity and AI at EY Switzerland, and software built in Python and TypeScript."
