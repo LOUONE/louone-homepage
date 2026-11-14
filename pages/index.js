@@ -134,6 +134,13 @@ const ProjectRow = ({ p }) => {
                 ))}
               </ul>
               <p className="stack">{p.stack.join(', ')}</p>
+              {p.href && (
+                <div className="feature-links">
+                  <Link href={p.href} className="link">
+                    Read the case study →
+                  </Link>
+                </div>
+              )}
             </div>
           </motion.div>
         )}
