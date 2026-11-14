@@ -6,9 +6,11 @@ import { AnimatePresence, motion } from 'framer-motion'
 import Dither from '../components/dither'
 import CopyEmail from '../components/copy-email'
 import { Reveal, Terminal } from '../components/card'
+import Reel from '../components/reel'
 import {
   profile,
   paintings,
+  hq,
   mailguard,
   projects,
   experience,
@@ -134,6 +136,13 @@ const ProjectRow = ({ p }) => {
                 ))}
               </ul>
               <p className="stack">{p.stack.join(', ')}</p>
+              {p.href && (
+                <div className="feature-links">
+                  <Link href={p.href} className="link">
+                    Read the case study →
+                  </Link>
+                </div>
+              )}
             </div>
           </motion.div>
         )}
@@ -145,6 +154,27 @@ const ProjectRow = ({ p }) => {
 const Work = () => (
   <Block id="work" title="Work" note="Things I build on my own time. The day job is under Experience.">
     <Reveal className="feature">
+      <div>
+        <p className="feature-meta">
+          {hq.kind}, {hq.year}
+        </p>
+        <h3>{hq.title}</h3>
+        <p>{hq.tagline}</p>
+        <p className="stack">{hq.stack.join(', ')}</p>
+        <div className="feature-links">
+          <Link href={hq.href} className="link">
+            Read the case study →
+          </Link>
+        </div>
+      </div>
+      <Reel
+        src="/images/work/hq/reel"
+        poster="/images/work/hq/reel-poster.jpg"
+        label="Replay of the hq case study: a node of the architecture map is clicked, the page scrolls to Isolation and an agent is boxed in, then the phone app gets a notification that a pull request waits for a yes."
+      />
+    </Reveal>
+
+    <Reveal className="feature feature--next">
       <div>
         <p className="feature-meta">
           {mailguard.kind}, {mailguard.year}
