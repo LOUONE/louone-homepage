@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import Dither from '../../components/dither'
 import HqPhone from '../../components/hq-phone'
+import Reel from '../../components/reel'
 import { Reveal } from '../../components/card'
 import { hq as project, paintings } from '../../lib/data'
 
@@ -600,6 +601,14 @@ export default function Hq() {
       </section>
 
       <section className="container">
+        <Reveal>
+          <Reel
+            src="/images/work/hq/reel"
+            poster="/images/work/hq/reel-poster.jpg"
+            label="Replay of this page: a node of the architecture map is clicked, the page scrolls to Isolation and an agent is boxed in, then the phone app gets a notification that a pull request waits for a yes."
+            priority
+          />
+        </Reveal>
         <Reveal className="numbers">
           {project.stats.map(s => (
             <div key={s.label}>
