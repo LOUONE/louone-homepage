@@ -5,6 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import Dither from '../../components/dither'
 import Image from 'next/image'
 import HqStage from '../../components/hq-stage'
+import HqPhoneDemo from '../../components/hq-phone-demo'
 import { Reveal } from '../../components/card'
 import { hq as project } from '../../lib/data'
 
@@ -589,27 +590,22 @@ const TEAM = [
 
 const ROUNDS = [
   {
-    when: 'Day 1',
     title: 'A spec before a single line',
     body: 'A written plan with the whole design system: colours, glass, radii, grid, motion. The first clickable prototype ran on made-up data, with no server at all.'
   },
   {
-    when: 'Day 2, morning',
     title: 'The painted scene, then the real data',
     body: 'The hills behind smoked glass, then the switch from demo data to the live agents, without touching a screen twice.'
   },
   {
-    when: 'Day 2, afternoon',
     title: 'Fixes from actually using it',
     body: 'Works offline, push notifications, and a bottom bar re-measured on my own phone because the simulator was off by a few points.'
   },
   {
-    when: 'Day 2, night',
     title: 'Trust in the conversation',
     body: 'Replies that get lost, messages sent twice, long answers that freeze the screen: each one reproduced on purpose, then fixed.'
   },
   {
-    when: 'Day 3',
     title: 'The parts I use every day',
     body: 'A market card with its own analysis, search across every conversation, and the brief read aloud on the way to work.'
   }
@@ -667,7 +663,7 @@ export default function Hq() {
 
       <section className="container hq-live">
         <Reveal>
-          <HqStage phoneShot="/images/work/hq/shots/phone-accueil.jpg" />
+          <HqStage />
         </Reveal>
         <Reveal className="numbers">
           {project.stats.map(s => (
@@ -680,6 +676,30 @@ export default function Hq() {
       </section>
 
       <div style={{ height: 64 }} />
+
+      <Block title="On my phone">
+        <div className="hq-pocket">
+          <Reveal className="prose">
+            <p>
+              Most of the time HQ lives on my phone. When an agent finishes a piece of work,
+              it lands in <strong>À décider</strong>, and nothing merges until I open it and
+              say yes.
+            </p>
+            <p>
+              This demo is drawn, not filmed: a faux version of the phone app, built with{' '}
+              <a href="https://benji.org/stageshow" target="_blank" rel="noreferrer" className="link">
+                Stageshow
+              </a>
+              , that plays the same flow as the real one.
+            </p>
+          </Reveal>
+          {/* No reveal wrapper: the stage plays its own entrance, and a transform
+              ending around it would nudge every frame by a sub-pixel */}
+          <div className="hq-pocket-demo">
+            <HqPhoneDemo />
+          </div>
+        </div>
+      </Block>
 
       <Block title="Why">
         <Reveal className="prose">
@@ -764,7 +784,6 @@ export default function Hq() {
         <Reveal as="ol" className="hq-rounds">
           {ROUNDS.map(r => (
             <li key={r.title}>
-              <span className="hq-when">{r.when}</span>
               <div>
                 <h3>{r.title}</h3>
                 <p>{r.body}</p>
@@ -1000,7 +1019,7 @@ export default function Hq() {
         .hq-rounds li {
           position: relative;
           display: grid;
-          grid-template-columns: 150px minmax(0, 1fr);
+          grid-template-columns: minmax(0, 1fr);
           gap: 4px 24px;
           padding: 0 0 28px 34px;
         }
@@ -1017,12 +1036,6 @@ export default function Hq() {
         }
         .hq-rounds li:nth-child(even)::before {
           border-color: #9a96ff;
-        }
-        .hq-when {
-          font-family: var(--mono);
-          font-size: 13px;
-          color: var(--dim);
-          padding-top: 3px;
         }
         .hq-rounds h3 {
           font-size: 19px;
@@ -1100,6 +1113,30 @@ export default function Hq() {
         }
 
         /* stills */
+        /* phone demo beside its copy */
+        .hq-pocket {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) minmax(0, 440px);
+          gap: 40px;
+          align-items: center;
+        }
+        .hq-pocket .prose p {
+          font-size: 17px;
+        }
+        .hq-pocket-demo {
+          width: 100%;
+          max-width: 440px;
+          justify-self: end;
+        }
+        @media (max-width: 1000px) {
+          .hq-pocket {
+            grid-template-columns: 1fr;
+          }
+          .hq-pocket-demo {
+            justify-self: center;
+          }
+        }
+
         .hq-shots {
           display: grid;
           grid-template-columns: 1fr 1fr;

@@ -7,3 +7,4 @@ dist
 # next build output (distDir)
 build
 .DS_Store
+*.tsbuildinfo

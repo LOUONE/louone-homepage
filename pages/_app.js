@@ -2,6 +2,8 @@ import { AnimatePresence, MotionConfig, motion } from 'framer-motion'
 import { Analytics } from '@vercel/analytics/react'
 import Layout from '../components/layout'
 import '../styles/globals.css'
+import '../components/stageshow-kit/all.css'
+import '../styles/hq-phone-demo.css'
 
 export default function Website({ Component, pageProps, router }) {
   return (

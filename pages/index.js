@@ -333,6 +333,7 @@ export default function Home() {
     <>
       <Head>
         <title>Louis Forrer · Cyber, AI & software, Geneva</title>
+        <link rel="preload" as="image" href={paintings.hero.src} />
       </Head>
       <Hero />
       <Statement />

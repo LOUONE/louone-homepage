@@ -1,0 +1,422 @@
+/* HQ phone demo (components/hq-phone-demo.tsx). Every rule is scoped under .hqp;
+   the phone's screen is laid out in true iOS points (402 × 874). Tokens come from
+   HQ's own design: night-blue smoked glass over the painted hills, gold for
+   action, Outfit for titles and Inter Tight for text. */
+
+.hqp .ss-stage {
+  --ss-accent: #ffaa4c;
+  --ss-accent-2: #ffcb8f;
+  --ss-accent-soft: rgba(255, 170, 76, 0.18);
+  --ss-success: #ffaa4c;
+  --ss-font: 'Inter Tight', ui-sans-serif, system-ui, sans-serif;
+  --hqp-glass: rgba(16, 17, 56, 0.56);
+  --hqp-line: rgba(255, 255, 255, 0.09);
+  --hqp-text: #f5f2ec;
+  --hqp-text-2: #d6d6ea;
+  --hqp-text-3: #b7b8d6;
+  --hqp-open: cubic-bezier(0.3, 0.75, 0.1, 1);
+  overflow: hidden;
+  border-radius: 28px;
+  background: transparent;
+  font-family: 'Inter Tight', ui-sans-serif, system-ui, sans-serif;
+}
+
+.hqp .hqp-wash {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(60% 45% at 50% 0%, rgba(154, 150, 255, 0.18), transparent 70%),
+    radial-gradient(70% 55% at 50% 100%, rgba(255, 170, 76, 0.12), transparent 70%);
+}
+
+/* Pinned a gutter from the top, centered, runs off the bottom */
+.hqp .hqp-phone {
+  position: absolute;
+  top: 44px;
+  left: 50px;
+}
+
+.hqp .ss-stage[data-layout='compact'] .hqp-phone {
+  top: 16px;
+  left: 16px;
+}
+
+/* The app's smoked glass over the wallpaper, darker at the top for the title */
+.hqp .hqp-veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(14, 14, 46, 0.86) 0%, rgba(14, 14, 46, 0.5) 45%, rgba(14, 14, 46, 0.25) 100%);
+}
+
+/* ---- Home ---- */
+
+.hqp .hqp-home {
+  position: absolute;
+  inset: 0;
+  transition: opacity 0.5s ease;
+}
+
+.hqp .hqp-home[data-back] {
+  /* The opened screen is opaque; the list fades out under it rather than
+     lingering as a second layer of lines */
+  opacity: 0;
+}
+
+.hqp .hqp-head {
+  position: absolute;
+  top: 70px;
+  right: 20px;
+  left: 20px;
+  display: grid;
+  gap: 12px;
+}
+
+.hqp .hqp-title-row,
+.hqp .hqp-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hqp .hqp-title {
+  font-family: 'Outfit', var(--ss-font);
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 38px;
+  letter-spacing: -0.02em;
+  color: var(--hqp-text);
+}
+
+.hqp .hqp-h2 {
+  font-family: 'Outfit', var(--ss-font);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 28px;
+  letter-spacing: -0.015em;
+  color: var(--hqp-text);
+}
+
+.hqp .hqp-round {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: var(--hqp-text-2);
+}
+
+.hqp .hqp-bar {
+  background: rgba(214, 214, 234, 0.42);
+}
+
+.hqp .hqp-bar--faint {
+  background: rgba(214, 214, 234, 0.24);
+}
+
+.hqp .hqp-bar--gold {
+  background: rgba(255, 203, 143, 0.6);
+}
+
+.hqp .hqp-flow {
+  position: absolute;
+  top: 156px;
+  right: 16px;
+  left: 16px;
+  display: grid;
+  gap: 16px;
+}
+
+.hqp .hqp-card {
+  display: grid;
+  /* No gap: a row folding away inside would leave it behind and hop at the end */
+  gap: 0;
+  padding: 16px 18px;
+  border-radius: 24px;
+  background: var(--hqp-glass);
+  border: 1px solid var(--hqp-line);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(18px) saturate(125%);
+  -webkit-backdrop-filter: blur(18px) saturate(125%);
+}
+
+.hqp .hqp-label {
+  padding-bottom: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 18px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--hqp-text-2);
+}
+
+.hqp .hqp-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  /* A fixed height: a row that folds in and out must measure the same open and closed */
+  height: 48px;
+  border-bottom: 1px solid var(--hqp-line);
+  color: var(--hqp-text);
+  font-size: 17px;
+  line-height: 22px;
+}
+
+.hqp .hqp-card > :last-child .hqp-row,
+.hqp .hqp-card > .hqp-row:last-child {
+  border-bottom: 0;
+}
+
+.hqp .hqp-row__icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 20px;
+  color: var(--hqp-text-2);
+}
+
+/* The row the story is about: like an iOS list row it highlights under the
+   finger instead of shrinking, so the card that opens from it is measured at
+   its true size and folds back exactly onto it */
+.hqp .hqp-row[data-target='row'] {
+  margin: 0 -10px;
+  padding: 0 10px;
+  border-radius: 12px;
+  transition: background-color 0.18s ease;
+}
+
+.hqp .hqp-row[data-target='row'][data-pressed] {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* The card leaves the list as it opens: the row's place stays, its look goes
+   with the card (Expand draws it as the face), so it never shows twice */
+.hqp .hqp-home[data-launching] .hqp-row[data-target='row'] {
+  opacity: 0;
+}
+
+/* The face Expand draws while it grows: the row itself, on its card's glass */
+.hqp .hqp-row--face {
+  width: 100%;
+  height: 100%;
+  padding: 0 10px;
+  border: 0;
+}
+
+.hqp .hqp-card--brief {
+  gap: 14px;
+}
+
+.hqp .hqp-event {
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  align-items: start;
+}
+
+.hqp .hqp-event__text {
+  display: grid;
+  gap: 8px;
+}
+
+/* ---- The project screen ---- */
+
+/* Hidden until the tap; above the home, under the status bar and the island */
+.hqp .hqp-launch {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  visibility: hidden;
+}
+
+.hqp .hqp-launch[data-on] {
+  visibility: visible;
+}
+
+.hqp .hqp-launch .ss-expand {
+  --ss-expand-bg: #121340;
+}
+
+.hqp .hqp-screen {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(14, 14, 46, 0.2), rgba(14, 14, 46, 0.65)),
+    url('/hq-demo/assets/fond-collines-2000.jpg') 38% 62% / cover no-repeat,
+    #121340;
+}
+
+.hqp .hqp-screen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(14, 14, 46, 0.9) 0%, rgba(14, 14, 46, 0.62) 50%, rgba(14, 14, 46, 0.4) 100%);
+}
+
+.hqp .hqp-screen > * {
+  position: relative;
+}
+
+.hqp .hqp-close {
+  position: absolute;
+  top: 66px;
+  right: 20px;
+  transition: transform 0.15s ease;
+}
+
+.hqp .hqp-close[data-pressed] {
+  transform: scale(0.9);
+}
+
+.hqp .hqp-screen__head {
+  display: grid;
+  justify-items: start;
+  gap: 8px;
+  padding: 110px 20px 0;
+}
+
+.hqp .hqp-screen__title {
+  font-family: 'Outfit', var(--ss-font);
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 38px;
+  letter-spacing: -0.02em;
+  color: var(--hqp-text);
+}
+
+.hqp .hqp-pill {
+  display: inline-grid;
+  padding: 5px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 170, 76, 0.45);
+  background: rgba(255, 170, 76, 0.18);
+  color: #ffdcb3;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 20px;
+  transition: background-color 0.35s ease, border-color 0.35s ease, color 0.35s ease;
+}
+
+.hqp .hqp-pill[data-done] {
+  border-color: rgba(154, 150, 255, 0.5);
+  background: rgba(154, 150, 255, 0.2);
+  color: #e0dfff;
+}
+
+.hqp .hqp-screen .hqp-card {
+  margin: 20px 16px 0;
+}
+
+.hqp .hqp-card--checks {
+  gap: 0;
+  padding: 6px 18px;
+}
+
+.hqp .hqp-check {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 46px;
+  border-bottom: 1px solid var(--hqp-line);
+  color: var(--hqp-text);
+  font-size: 16px;
+  line-height: 21px;
+}
+
+.hqp .hqp-check:last-child {
+  border-bottom: 0;
+}
+
+.hqp .hqp-check .ss-check {
+  --ss-success: #9a96ff;
+  flex: none;
+  color: #c9c7ff;
+}
+
+.hqp .hqp-card--notes {
+  gap: 12px;
+  padding: 18px;
+}
+
+.hqp .hqp-merge {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  place-items: center;
+  height: 54px;
+  margin: 22px 16px 0;
+  border-radius: 999px;
+  color: #2a1600;
+  font-size: 17px;
+  font-weight: 600;
+  transition: color 0.25s ease;
+}
+
+.hqp .hqp-merge .ss-states__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* A fixed, even label box: the icon beside it lands on a whole pixel */
+.hqp .hqp-merge__label {
+  display: inline-block;
+  width: 84px;
+  text-align: left;
+}
+
+/* Its fill gives under the finger; the label holds still */
+.hqp .hqp-merge::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background-color: var(--hqp-merge-fill, #ffaa4c);
+  transition: background-color 0.3s ease, transform 0.15s ease;
+}
+
+.hqp .hqp-merge[data-pressed]::before {
+  transform: scale(0.97);
+}
+
+.hqp .hqp-merge[data-phase='done'] {
+  --hqp-merge-fill: rgba(154, 150, 255, 0.24);
+  color: #e0dfff;
+}
+
+.hqp .hqp-merge[data-phase='done'] .ss-check {
+  --ss-success: #9a96ff;
+}
+
+/* ---- dev's notification ---- */
+
+.hqp .hqp-banner {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  animation: hqp-banner-in 0.5s cubic-bezier(0.2, 0.9, 0.25, 1) both;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.6, 1), opacity 0.4s ease;
+}
+
+.hqp .hqp-banner .ss-notification[data-banner] {
+  animation: none;
+}
+
+.hqp .hqp-banner[data-out] {
+  transform: translateY(-36px);
+  opacity: 0;
+}
+
+.hqp .hqp-banner .ss-notification__icon > img {
+  border-radius: 9px;
+}
+
+@keyframes hqp-banner-in {
+  from {
+    transform: translateY(-36px);
+    opacity: 0;
+  }
+}

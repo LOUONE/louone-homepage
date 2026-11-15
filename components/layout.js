@@ -3,7 +3,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import CommandPalette from './command-palette'
-import { profile, paintings } from '../lib/data'
+import { profile } from '../lib/data'
 
 const Nav = ({ onOpenPalette }) => {
   const [scrolled, setScrolled] = useState(false)
@@ -74,7 +74,6 @@ export default function Layout({ children }) {
           name="description"
           content="Louis Forrer, Geneva. Cybersecurity and AI at EY Switzerland, and software built in Python and TypeScript."
         />
-        <link rel="preload" as="image" href={paintings.hero.src} />
       </Head>
       <Nav onOpenPalette={() => setPaletteOpen(true)} />
       <main>{children}</main>

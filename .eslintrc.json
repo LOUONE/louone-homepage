@@ -1,7 +1,16 @@
 {
   "root": true,
   "extends": "next",
+  "ignorePatterns": ["components/stageshow-kit/"],
   "rules": {
     "no-unused-vars": ["error", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }]
-  }
+  },
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "rules": {
+        "no-unused-vars": "off"
+      }
+    }
+  ]
 }

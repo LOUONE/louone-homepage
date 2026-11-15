@@ -29,7 +29,7 @@ class Stop extends Error {}
 const sleep = ms => new Promise(r => setTimeout(r, ms))
 const ease = t => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2)
 
-export default function HqStage({ phoneShot }) {
+export default function HqStage() {
   const stage = useRef(null)
   const frame = useRef(null)
   const camera = useRef(null)
@@ -307,12 +307,25 @@ export default function HqStage({ phoneShot }) {
     setMode('tour')
   }
 
-  /* ---------- phones: the app itself at phone size, hands-on ---------- */
+  /* ---------- phones: a real capture and the app itself, full screen ---------- */
   if (narrow) {
     return (
-      <div ref={stage} className="hq-stage hq-stage--phone">
-        <PhoneFrame />
-        <p className="hq-stage-note">Live demo, fictional data. Tap around.</p>
+      <div ref={stage} className="hq-stage hq-stage--narrow">
+        <a href={`${SRC}#/accueil`} target="_blank" rel="noreferrer" aria-label="Open the live demo of HQ">
+          <Image
+            src="/images/work/hq/shots/desktop-accueil.jpg"
+            alt="HQ home screen with the morning brief (fictional data)."
+            width={2880}
+            height={1800}
+            sizes="100vw"
+          />
+        </a>
+        <p className="hq-stage-note">
+          <a href={`${SRC}#/accueil`} target="_blank" rel="noreferrer" className="link">
+            Open the live demo →
+          </a>{' '}
+          The guided tour plays on a larger screen.
+        </p>
       </div>
     )
   }
@@ -359,11 +372,6 @@ export default function HqStage({ phoneShot }) {
         {mode === 'tour' && (
           <button className="hq-stage-hit" onClick={takeControls} aria-label="Stop the tour and use the demo yourself" />
         )}
-        {phoneShot && (
-          <div className="hq-satellite" aria-hidden>
-            <Image src={phoneShot} alt="" width={1179} height={1977} sizes="220px" />
-          </div>
-        )}
       </div>
 
       <div className="hq-stage-bar">
@@ -396,31 +404,3 @@ export default function HqStage({ phoneShot }) {
   )
 }
 
-const PW = 393
-const PH = 852
-
-function PhoneFrame() {
-  const box = useRef(null)
-  const [k, setK] = useState(0)
-  useEffect(() => {
-    setK(box.current.clientWidth / PW)
-    const ro = new ResizeObserver(([e]) => e.contentRect.width && setK(e.contentRect.width / PW))
-    ro.observe(box.current)
-    return () => ro.disconnect()
-  }, [])
-  return (
-    <div className="hq-phone-frame">
-      <div ref={box} className="hq-phone-screen" style={{ height: k ? PH * k : undefined }}>
-        {k > 0 && (
-          <iframe
-            title="HQ, live demo with fictional data"
-            src={`${SRC}#/accueil`}
-            width={PW}
-            height={PH}
-            style={{ transform: `scale(${k})`, transformOrigin: '0 0' }}
-          />
-        )}
-      </div>
-    </div>
-  )
-}

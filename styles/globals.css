@@ -1253,33 +1253,6 @@ kbd {
   }
 }
 
-/* A real phone screenshot straddling the corner of the window, like a satellite */
-.hq-satellite {
-  position: absolute;
-  right: clamp(-28px, -2vw, -12px);
-  bottom: clamp(-120px, -9vw, -60px);
-  z-index: 4;
-  width: clamp(140px, 15vw, 210px);
-  padding: 7px;
-  border-radius: 36px;
-  background: #050512;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  box-shadow: 0 40px 80px -20px rgba(5, 4, 30, 0.9);
-  pointer-events: none;
-  animation: hq-float 7s ease-in-out infinite;
-}
-
-.hq-satellite img {
-  width: 100%;
-  height: auto;
-  border-radius: 29px;
-}
-
-@keyframes hq-float {
-  50% {
-    translate: 0 -10px;
-  }
-}
 
 .hq-stage-wrap .hq-stage {
   overflow: visible;
@@ -1299,7 +1272,6 @@ kbd {
   gap: 14px 24px;
   flex-wrap: wrap;
   margin-top: 22px;
-  padding-right: clamp(150px, 17vw, 230px);
   font-size: 15px;
 }
 
@@ -1342,39 +1314,23 @@ kbd {
   }
 }
 
-.hq-stage--phone {
+.hq-stage--narrow {
+  display: grid;
+  gap: 14px;
   border: 0;
   border-radius: 0;
   background: none;
   box-shadow: none;
   overflow: visible;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
 }
 
-.hq-phone-frame {
-  width: min(320px, 84vw);
-  padding: 8px;
-  border-radius: 44px;
-  background: #050512;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  box-shadow: 0 40px 80px -20px rgba(5, 4, 30, 0.9);
+.hq-stage--narrow img {
+  width: 100%;
+  height: auto;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.hq-phone-screen {
-  position: relative;
-  overflow: hidden;
-  border-radius: 36px;
-}
-
-.hq-phone-screen iframe {
-  position: absolute;
-  left: 0;
-  top: 0;
-  border: 0;
-}
 
 .hq-stage-note {
   font-size: 14px;
@@ -1382,9 +1338,6 @@ kbd {
 }
 
 @media (max-width: 900px) {
-  .hq-satellite {
-    display: none;
-  }
   .hq-stage-bar {
     padding-right: 0;
   }
