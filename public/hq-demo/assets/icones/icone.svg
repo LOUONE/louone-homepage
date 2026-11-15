@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+	<!-- Icône de HQ (source des PNG de ce dossier, rendus avec Playwright et la police
+	     Outfit de fonts/). Ciel de l'image de fond : bleu-violet profond vers orange rosé. -->
+	<defs>
+		<linearGradient id="ciel" x1="0" y1="0" x2="0" y2="1">
+			<stop offset="0" stop-color="#24268f"/>
+			<stop offset="0.55" stop-color="#9a86df"/>
+			<stop offset="1" stop-color="#f69d8c"/>
+		</linearGradient>
+	</defs>
+	<rect width="512" height="512" fill="url(#ciel)"/>
+	<text x="256" y="256" dy="0.35em" text-anchor="middle" font-family="Outfit, sans-serif" font-weight="700" font-size="210" letter-spacing="-4" fill="#f5f2ec">HQ</text>
+</svg>

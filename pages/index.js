@@ -6,7 +6,6 @@ import { AnimatePresence, motion } from 'framer-motion'
 import Dither from '../components/dither'
 import CopyEmail from '../components/copy-email'
 import { Reveal, Terminal } from '../components/card'
-import Reel from '../components/reel'
 import {
   profile,
   paintings,
@@ -167,11 +166,19 @@ const Work = () => (
           </Link>
         </div>
       </div>
-      <Reel
-        src="/images/work/hq/reel"
-        poster="/images/work/hq/reel-poster.jpg"
-        label="Replay of the hq case study: a node of the architecture map is clicked, the page scrolls to Isolation and an agent is boxed in, then the phone app gets a notification that a pull request waits for a yes."
-      />
+      <Link href={hq.href} className="hq-teaser" aria-label="Open the HQ case study and its live demo">
+        <Image
+          src="/images/work/hq/shots/desktop-accueil.jpg"
+          alt="HQ home screen: the morning brief with agenda, mail, news and markets, over a painted landscape (fictional data)."
+          width={2880}
+          height={1800}
+          sizes="(max-width: 1200px) 100vw, 640px"
+        />
+        <span className="hq-teaser-phone" aria-hidden>
+          <Image src="/images/work/hq/shots/phone-maestro.jpg" alt="" width={1179} height={1977} sizes="150px" />
+        </span>
+        <span className="hq-teaser-cta">Try the live demo →</span>
+      </Link>
     </Reveal>
 
     <Reveal className="feature feature--next">

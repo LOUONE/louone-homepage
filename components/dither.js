@@ -28,6 +28,7 @@ export default function Dither({
   text = '',
   textTop = 96,
   textCenter = false,
+  font = FONT,
   dissolve = false,
   className = ''
 }) {
@@ -60,7 +61,7 @@ export default function Dither({
       mask = null
       if (!text) return
       try {
-        await document.fonts.load(`800 64px "${FONT}"`)
+        await document.fonts.load(`800 64px "${font}"`)
       } catch {}
       if (!alive || !cols) return
 
@@ -75,12 +76,13 @@ export default function Dither({
       off.height = rows
       const c = off.getContext('2d')
       const setFont = size => {
-        c.font = `800 ${size}px "${FONT}", system-ui, sans-serif`
+        c.font = `800 ${size}px "${font}", system-ui, sans-serif`
         if ('letterSpacing' in c) c.letterSpacing = `${-0.015 * size}px`
       }
       setFont(100)
       const widest = Math.max(...lines.map(l => c.measureText(l).width))
-      const size = (100 * avail) / widest
+      // Fit the width, but never taller than about 60% of the field (short words like "HQ")
+      const size = Math.min((100 * avail) / widest, (rows * 0.6) / (0.74 + (lines.length - 1) * 0.84))
       setFont(size)
       c.fillStyle = '#fff'
       c.textBaseline = 'alphabetic'
@@ -280,7 +282,7 @@ export default function Dither({
       window.removeEventListener('scroll', onScroll)
       document.removeEventListener('pointerleave', onLeave)
     }
-  }, [src, cell, radius, text, textTop, textCenter, dissolve])
+  }, [src, cell, radius, text, textTop, textCenter, font, dissolve])
 
   return (
     <div ref={wrap} className={`dither ${className}`} aria-hidden>

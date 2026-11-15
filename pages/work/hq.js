@@ -3,10 +3,10 @@ import Head from 'next/head'
 import Link from 'next/link'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import Dither from '../../components/dither'
-import HqPhone from '../../components/hq-phone'
-import Reel from '../../components/reel'
+import Image from 'next/image'
+import HqStage from '../../components/hq-stage'
 import { Reveal } from '../../components/card'
-import { hq as project, paintings } from '../../lib/data'
+import { hq as project } from '../../lib/data'
 
 const EASE = [0.22, 1, 0.36, 1]
 
@@ -559,23 +559,88 @@ const limits = [
   }
 ]
 
+const TEAM = [
+  {
+    name: 'Maestro',
+    role: 'The orchestrator',
+    body: 'Writes the morning and evening brief, takes every request, asks what is unclear and hands the work to the right teammate.'
+  },
+  {
+    name: 'veille',
+    role: 'The reader',
+    body: 'Goes through AI, security and iOS news twice a day and keeps the few things worth my time.'
+  },
+  {
+    name: 'trading',
+    role: 'The market watcher',
+    body: 'Follows indices and my watchlist, writes an analysis per line and runs a trading bot in simulation only.'
+  },
+  {
+    name: 'perso',
+    role: 'The assistant',
+    body: 'Sorts mail, reads the agenda and drafts replies. It never sends anything without me.'
+  },
+  {
+    name: 'dev',
+    role: 'The builder',
+    body: 'Starts coding sessions in throwaway cloud sandboxes and brings every change back as a pull request.'
+  }
+]
+
+const ROUNDS = [
+  {
+    when: 'Day 1',
+    title: 'A spec before a single line',
+    body: 'A written plan with the whole design system: colours, glass, radii, grid, motion. The first clickable prototype ran on made-up data, with no server at all.'
+  },
+  {
+    when: 'Day 2, morning',
+    title: 'The painted scene, then the real data',
+    body: 'The hills behind smoked glass, then the switch from demo data to the live agents, without touching a screen twice.'
+  },
+  {
+    when: 'Day 2, afternoon',
+    title: 'Fixes from actually using it',
+    body: 'Works offline, push notifications, and a bottom bar re-measured on my own phone because the simulator was off by a few points.'
+  },
+  {
+    when: 'Day 2, night',
+    title: 'Trust in the conversation',
+    body: 'Replies that get lost, messages sent twice, long answers that freeze the screen: each one reproduced on purpose, then fixed.'
+  },
+  {
+    when: 'Day 3',
+    title: 'The parts I use every day',
+    body: 'A market card with its own analysis, search across every conversation, and the brief read aloud on the way to work.'
+  }
+]
+
+const LOOP = [
+  { k: 'Brief', v: 'A short written plan of the round, approved before anything starts.' },
+  { k: 'Sandbox', v: 'A coding agent works in a throwaway cloud session on its own branch.' },
+  { k: 'Checks', v: 'Lint, build and unit tests. The session is not allowed to finish while they fail.' },
+  { k: 'Review', v: 'A second, read-only agent reviews the change before I see it.' },
+  { k: 'Bench', v: 'Playwright drives the app on desktop Chromium and iPhone WebKit, against a fake server that can go slow, drop a stream or disappear.' },
+  { k: 'Merge', v: 'I read the pull request and press the button. Nobody else can.' }
+]
+
 export default function Hq() {
   return (
-    <>
+    <div className="theme-hq">
       <Head>
-        <title>An AI agent team on a small server · Louis Forrer</title>
-        <meta property="og:title" content="An AI agent team on a small server · Louis Forrer" />
+        <title>HQ, my AI team · Louis Forrer</title>
+        <meta property="og:title" content="HQ, my AI team · Louis Forrer" />
         <meta name="description" content={project.tagline} />
       </Head>
 
-      <div className="case-band">
-        <Dither src={paintings.dusk.src} cell={6} radius={140} text="agents" textTop={84} />
+      <div className="case-band hq-band">
+        <Dither src="/hq-demo/assets/fond-collines-2000.jpg" cell={6} radius={160} text="HQ" textTop={92} font="Outfit" />
       </div>
-      <h1 className="sr-only">{project.title}</h1>
+      <h1 className="sr-only">HQ</h1>
 
       <section className="case-hero container">
         <Reveal className="crumbs">
-          <Link href="/">Home</Link> / <Link href="/#work">Work</Link> / hq
+          <Link href="/">Home</Link> / <Link href="/#work">Work</Link> / HQ
         </Reveal>
         <Reveal as="p" delay={0.05} className="lede">
           {project.tagline}
@@ -590,8 +655,8 @@ export default function Hq() {
             <dd>Everything, solo</dd>
           </div>
           <div>
-            <dt>Runs on</dt>
-            <dd>A small private server</dd>
+            <dt>Status</dt>
+            <dd>In daily use</dd>
           </div>
           <div>
             <dt>Source</dt>
@@ -600,14 +665,9 @@ export default function Hq() {
         </Reveal>
       </section>
 
-      <section className="container">
+      <section className="container hq-live">
         <Reveal>
-          <Reel
-            src="/images/work/hq/reel"
-            poster="/images/work/hq/reel-poster.jpg"
-            label="Replay of this page: a node of the architecture map is clicked, the page scrolls to Isolation and an agent is boxed in, then the phone app gets a notification that a pull request waits for a yes."
-            priority
-          />
+          <HqStage phoneShot="/images/work/hq/shots/phone-accueil.jpg" />
         </Reveal>
         <Reveal className="numbers">
           {project.stats.map(s => (
@@ -624,25 +684,40 @@ export default function Hq() {
       <Block title="Why">
         <Reveal className="prose">
           <p>
-            AI agents are useful when they can act: write code, read notes, check on things.
-            That is also what makes them risky. I wanted a team I could hand real work to
-            <strong> without handing over the keys</strong>.
+            AI agents are useful when they can act: read mail, keep notes, watch markets, write
+            code. That is also what makes them risky. I wanted a team I could hand real work to
+            <strong> without handing over the keys</strong>, and one place to talk to all of
+            them that I would actually enjoy opening every morning.
           </p>
           <p>
-            So the setup starts from the other end. Each agent gets the smallest set of
-            rights that lets it do its one job, personal data sits somewhere none of the
-            others can reach, and every step that cannot be undone waits for a person.
+            So there are two halves: a set of agents, each boxed in to its one job, and an app
+            on my phone that shows what they did, what they need from me and what is waiting
+            for a yes.
           </p>
+        </Reveal>
+      </Block>
+
+      <Block title="The team">
+        <Reveal as="ul" className="hq-team">
+          {TEAM.map((m, i) => (
+            <li key={m.name} style={{ '--i': i }}>
+              <span className="hq-avatar" aria-hidden>
+                {m.name[0].toUpperCase()}
+              </span>
+              <h3>{m.name}</h3>
+              <p className="hq-role">{m.role}</p>
+              <p>{m.body}</p>
+            </li>
+          ))}
         </Reveal>
       </Block>
 
       <Block title="Architecture">
         <Reveal className="prose">
           <p>
-            One orchestrator, a few specialised agents, two vaults that never touch, and
-            tools handed out one by one. Everything runs on a small private server, reachable
-            only over a private network. <strong>Click a box</strong> to see what it does and
-            why it is built that way.
+            One orchestrator, specialised agents, two vaults that never touch, and tools handed
+            out one by one. <strong>Click a box</strong> to see what it does and why it is built
+            that way.
           </p>
         </Reveal>
         <Reveal style={{ marginTop: 32 }}>
@@ -653,9 +728,8 @@ export default function Hq() {
       <Block title="Isolation">
         <Reveal className="prose">
           <p>
-            The same agent, two ways. With every right, one confused step can reach anything
-            on the machine. Boxed in, the worst case is <strong>a bad pull request</strong>{' '}
-            that I decline.
+            The same agent, two ways. With every right, one confused step can reach anything.
+            Boxed in, the worst case is <strong>a bad pull request</strong> that I decline.
           </p>
         </Reveal>
         <Reveal style={{ marginTop: 32 }}>
@@ -667,8 +741,8 @@ export default function Hq() {
         <Reveal className="prose">
           <p>
             Every piece of work follows the same path, from a sentence I type to a merge I
-            approve. Two of the seven steps are <strong>human gates</strong>: nothing moves
-            past them on its own.
+            approve. Two of the seven steps are <strong>human gates</strong>: nothing moves past
+            them on its own.
           </p>
         </Reveal>
         <Reveal style={{ marginTop: 32 }}>
@@ -676,16 +750,65 @@ export default function Hq() {
         </Reveal>
       </Block>
 
-      <Block title="Dashboard">
+      <Block title="How I built it">
         <Reveal className="prose">
           <p>
-            I talk to the team from my phone. A small web app shows the morning brief, the
-            conversation with the orchestrator, every project with its pull request and the
-            health of the server. <strong>Merge is a button only I can press</strong>.
+            The app is plain HTML, CSS and JavaScript: <strong>no framework, no build step, no
+            dependency</strong>, fonts embedded. About eight thousand lines, written in sixteen
+            rounds over three days, mostly by coding agents, every round reviewed and merged by
+            me. The agents built their own dashboard; my job was the spec, the taste and the
+            yes.
           </p>
         </Reveal>
-        <Reveal style={{ marginTop: 32 }}>
-          <HqPhone />
+
+        <Reveal as="ol" className="hq-rounds">
+          {ROUNDS.map(r => (
+            <li key={r.title}>
+              <span className="hq-when">{r.when}</span>
+              <div>
+                <h3>{r.title}</h3>
+                <p>{r.body}</p>
+              </div>
+            </li>
+          ))}
+        </Reveal>
+
+        <Reveal className="prose" style={{ marginTop: 56 }}>
+          <p>
+            Each round goes through the same loop. The slow, boring parts are automated so that
+            my review can stay short and real.
+          </p>
+        </Reveal>
+        <Reveal as="ol" className="hq-loop">
+          {LOOP.map((s, i) => (
+            <li key={s.k} style={{ '--i': i }}>
+              <b>{s.k}</b>
+              <span>{s.v}</span>
+            </li>
+          ))}
+        </Reveal>
+
+        <Reveal className="hq-shots">
+          <figure>
+            <Image
+              src="/images/work/hq/shots/desktop-maestro.jpg"
+              alt="HQ conversation with Maestro, showing which tools it used for an answer (fictional data)."
+              width={2880}
+              height={1800}
+              sizes="(max-width: 860px) 100vw, 560px"
+            />
+            <figcaption>Every answer can show what the agent did, in plain words.</figcaption>
+          </figure>
+          <figure>
+            <Image
+              src="/images/work/hq/shots/desktop-systeme.jpg"
+              alt="HQ system screen with running costs, scheduled tasks and the paper-trading bot (fictional data)."
+              width={2880}
+              height={1800}
+              sizes="(max-width: 860px) 100vw, 560px"
+            />
+            <figcaption>Costs, schedules and the simulation bot. Screens shown with made-up data.</figcaption>
+          </figure>
         </Reveal>
       </Block>
 
@@ -719,6 +842,290 @@ export default function Hq() {
       </Block>
 
       <style jsx global>{`
+        @font-face {
+          font-family: 'Outfit';
+          src: url('/hq-demo/fonts/outfit-latin-wght-normal.woff2') format('woff2');
+          font-weight: 100 900;
+          font-display: swap;
+        }
+        @font-face {
+          font-family: 'Inter Tight';
+          src: url('/hq-demo/fonts/inter-tight-latin-wght-normal.woff2') format('woff2');
+          font-weight: 100 900;
+          font-display: swap;
+        }
+        @font-face {
+          font-family: 'Geist Mono';
+          src: url('/hq-demo/fonts/geist-mono-latin-wght-normal.woff2') format('woff2');
+          font-weight: 100 900;
+          font-display: swap;
+        }
+
+        body {
+          background: #0e0e2e;
+        }
+        .nav.scrolled {
+          background: rgba(14, 14, 46, 0.82);
+        }
+
+        /* HQ's own design language for this page: night blue, smoked glass, gold and violet */
+        .theme-hq {
+          --bg: #0e0e2e;
+          --raised: rgba(10, 10, 40, 0.42);
+          --line: rgba(255, 255, 255, 0.12);
+          --line-soft: rgba(255, 255, 255, 0.07);
+          --text: #f5f2ec;
+          --muted: #c3c3df;
+          --dim: #8e8fb8;
+          --red: #ffaa4c;
+          --violet: #9a96ff;
+          --sans: 'Inter Tight', ui-sans-serif, system-ui, sans-serif;
+          --mono: 'Geist Mono', ui-monospace, monospace;
+          font-family: var(--sans);
+          background: radial-gradient(120% 60% at 50% 0%, #1b1a56 0%, #0e0e2e 60%);
+          color: var(--text);
+        }
+        .theme-hq ::selection {
+          background: var(--violet);
+          color: #0e0e2e;
+        }
+        .theme-hq h2,
+        .theme-hq h3,
+        .theme-hq .lede,
+        .theme-hq .numbers b {
+          font-family: 'Outfit', var(--sans);
+        }
+        .theme-hq .block-head h2 {
+          font-weight: 600;
+          letter-spacing: -0.035em;
+        }
+        .theme-hq .block {
+          border-top-color: rgba(255, 255, 255, 0.1);
+        }
+        .theme-hq .lede {
+          font-weight: 400;
+          letter-spacing: -0.02em;
+        }
+        .theme-hq .numbers b {
+          font-weight: 600;
+          color: #fff;
+        }
+        .theme-hq .numbers > div:nth-child(odd) b {
+          color: #ffcb8f;
+        }
+        .theme-hq .numbers > div:nth-child(even) b {
+          color: #c9c7ff;
+        }
+        .theme-hq .link:hover {
+          color: #ffcb8f;
+        }
+        .theme-hq .points li {
+          border-top-color: rgba(255, 255, 255, 0.1);
+        }
+        .hq-band::after {
+          background: linear-gradient(to top, #0e0e2e 0%, rgba(14, 14, 46, 0.4) 35%, transparent 60%);
+        }
+
+        /* team */
+        .hq-team {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+          gap: 14px;
+        }
+        .hq-team li {
+          padding: 22px;
+          border-radius: 22px;
+          background: rgba(16, 17, 56, 0.55);
+          border: 1px solid rgba(255, 255, 255, 0.09);
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 20px 50px -24px rgba(10, 8, 40, 0.8);
+          transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s;
+        }
+        .hq-team li:hover {
+          transform: translateY(-4px);
+          border-color: rgba(255, 170, 76, 0.35);
+        }
+        .hq-avatar {
+          display: grid;
+          place-items: center;
+          width: 40px;
+          height: 40px;
+          border-radius: 14px;
+          background: rgba(255, 255, 255, 0.08);
+          border: 1px solid rgba(255, 255, 255, 0.14);
+          font-family: 'Outfit', sans-serif;
+          font-weight: 600;
+          color: #ffcb8f;
+        }
+        .hq-team li:nth-child(even) .hq-avatar {
+          color: #c9c7ff;
+        }
+        .hq-team h3 {
+          margin-top: 16px;
+          font-size: 22px;
+          font-weight: 600;
+          letter-spacing: -0.02em;
+        }
+        .hq-role {
+          margin-top: 2px;
+          font-size: 14px;
+          color: var(--dim);
+        }
+        .hq-team p:last-child {
+          margin-top: 10px;
+          font-size: 15px;
+          line-height: 1.55;
+          color: var(--muted);
+        }
+
+        /* build rounds */
+        .hq-rounds {
+          list-style: none;
+          margin: 40px 0 0;
+          padding: 0;
+          position: relative;
+        }
+        .hq-rounds::before {
+          content: '';
+          position: absolute;
+          left: 7px;
+          top: 8px;
+          bottom: 8px;
+          width: 1px;
+          background: linear-gradient(#ffaa4c, #9a96ff);
+          opacity: 0.6;
+        }
+        .hq-rounds li {
+          position: relative;
+          display: grid;
+          grid-template-columns: 150px minmax(0, 1fr);
+          gap: 4px 24px;
+          padding: 0 0 28px 34px;
+        }
+        .hq-rounds li::before {
+          content: '';
+          position: absolute;
+          left: 2px;
+          top: 7px;
+          width: 11px;
+          height: 11px;
+          border-radius: 50%;
+          background: #0e0e2e;
+          border: 2px solid #ffaa4c;
+        }
+        .hq-rounds li:nth-child(even)::before {
+          border-color: #9a96ff;
+        }
+        .hq-when {
+          font-family: var(--mono);
+          font-size: 13px;
+          color: var(--dim);
+          padding-top: 3px;
+        }
+        .hq-rounds h3 {
+          font-size: 19px;
+          font-weight: 600;
+          letter-spacing: -0.015em;
+        }
+        .hq-rounds p {
+          margin-top: 6px;
+          color: var(--muted);
+          line-height: 1.6;
+        }
+        @media (max-width: 640px) {
+          .hq-rounds li {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        /* the loop */
+        .hq-loop {
+          list-style: none;
+          margin: 28px 0 0;
+          padding: 0;
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 12px;
+          counter-reset: loop;
+        }
+        .hq-loop li {
+          counter-increment: loop;
+          padding: 18px;
+          border-radius: 18px;
+          background: rgba(10, 10, 40, 0.4);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .hq-loop b {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          font-family: 'Outfit', sans-serif;
+          font-weight: 600;
+          font-size: 17px;
+        }
+        .hq-loop b::before {
+          content: counter(loop);
+          display: grid;
+          place-items: center;
+          width: 22px;
+          height: 22px;
+          border-radius: 50%;
+          font-family: var(--mono);
+          font-size: 11px;
+          background: rgba(255, 170, 76, 0.18);
+          color: #ffcb8f;
+        }
+        .hq-loop li:last-child b::before {
+          background: #ffaa4c;
+          color: #2a1600;
+        }
+        .hq-loop span {
+          display: block;
+          margin-top: 8px;
+          font-size: 15px;
+          line-height: 1.55;
+          color: var(--muted);
+        }
+        @media (max-width: 900px) {
+          .hq-loop {
+            grid-template-columns: 1fr 1fr;
+          }
+        }
+        @media (max-width: 520px) {
+          .hq-loop {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        /* stills */
+        .hq-shots {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 16px;
+          margin-top: 56px;
+        }
+        .hq-shots figure {
+          margin: 0;
+        }
+        .hq-shots img {
+          width: 100%;
+          height: auto;
+          border-radius: 14px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          box-shadow: 0 30px 70px -30px rgba(10, 8, 40, 0.9);
+        }
+        .hq-shots figcaption {
+          margin-top: 10px;
+          font-size: 13px;
+          color: var(--dim);
+        }
+        @media (max-width: 760px) {
+          .hq-shots {
+            grid-template-columns: 1fr;
+          }
+        }
         .hq-panel {
           border: 1px solid var(--line);
           border-radius: 10px;
@@ -1103,7 +1510,8 @@ export default function Hq() {
           cursor: default;
           background-size: 0 1px;
         }
+      
       `}</style>
-    </>
+    </div>
   )
 }
