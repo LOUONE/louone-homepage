@@ -5,7 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import Dither from '../../components/dither'
 import Image from 'next/image'
 import HqStage from '../../components/hq-stage'
-import HqPhoneDemo from '../../components/hq-phone-demo'
+import HqFlowDemo from '../../components/hq-flow-demo'
 import { Reveal } from '../../components/card'
 import { hq as project } from '../../lib/data'
 
@@ -677,28 +677,26 @@ export default function Hq() {
 
       <div style={{ height: 64 }} />
 
-      <Block title="On my phone">
-        <div className="hq-pocket">
-          <Reveal className="prose">
-            <p>
-              Most of the time HQ lives on my phone. When an agent finishes a piece of work,
-              it lands in <strong>À décider</strong>, and nothing merges until I open it and
-              say yes.
-            </p>
-            <p>
-              This demo is drawn, not filmed: a faux version of the phone app, built with{' '}
-              <a href="https://benji.org/stageshow" target="_blank" rel="noreferrer" className="link">
-                Stageshow
-              </a>
-              , that plays the same flow as the real one.
-            </p>
-          </Reveal>
-          {/* No reveal wrapper: the stage plays its own entrance, and a transform
-              ending around it would nudge every frame by a sub-pixel */}
-          <div className="hq-pocket-demo">
-            <HqPhoneDemo />
-          </div>
+      <Block title="The flow">
+        <Reveal className="prose">
+          <p>
+            One sentence to Maestro starts everything. It hands the work to the right agent,
+            the change comes back as a pull request, and <strong>nothing merges until I say
+            yes</strong>.
+          </p>
+        </Reveal>
+        {/* No reveal wrapper: the stage plays its own entrance, and a transform
+            ending around it would nudge every frame by a sub-pixel */}
+        <div className="hq-flow">
+          <HqFlowDemo />
         </div>
+        <p className="hq-flow-note">
+          Drawn, not filmed: the same flow as the real app, animated with{' '}
+          <a href="https://benji.org/stageshow" target="_blank" rel="noreferrer" className="link">
+            Stageshow
+          </a>
+          .
+        </p>
       </Block>
 
       <Block title="Why">
@@ -1113,28 +1111,14 @@ export default function Hq() {
         }
 
         /* stills */
-        /* phone demo beside its copy */
-        .hq-pocket {
-          display: grid;
-          grid-template-columns: minmax(0, 1fr) minmax(0, 440px);
-          gap: 40px;
-          align-items: center;
+        /* the Stageshow flow demo, full width of the content column */
+        .hq-flow {
+          margin-top: 32px;
         }
-        .hq-pocket .prose p {
-          font-size: 17px;
-        }
-        .hq-pocket-demo {
-          width: 100%;
-          max-width: 440px;
-          justify-self: end;
-        }
-        @media (max-width: 1000px) {
-          .hq-pocket {
-            grid-template-columns: 1fr;
-          }
-          .hq-pocket-demo {
-            justify-self: center;
-          }
+        .hq-flow-note {
+          margin-top: 14px;
+          font-size: 14px;
+          color: var(--dim);
         }
 
         .hq-shots {

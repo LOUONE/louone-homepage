@@ -1,0 +1,447 @@
+/* HQ web demo (components/hq-flow-demo.tsx). Every rule is scoped under .hqw.
+   HQ's own design: the app is a smoked-glass window over the painted hills,
+   night blue inside, gold for action, violet for done, Outfit for titles and
+   Inter Tight for text. Colors are restyled here; kit geometry is left alone. */
+
+.hqw .ss-stage {
+  --ss-accent: #ffaa4c;
+  --ss-accent-2: #ffcb8f;
+  --ss-accent-soft: rgba(255, 170, 76, 0.18);
+  --ss-font: 'Inter Tight', ui-sans-serif, system-ui, sans-serif;
+  --hqw-line: rgba(255, 255, 255, 0.08);
+  --hqw-text: #f5f2ec;
+  --hqw-text-2: #d6d6ea;
+  --hqw-text-3: #a9aacb;
+  overflow: hidden;
+  border-radius: 22px;
+  /* The app's own backdrop: the painted hills, dimmed toward the top */
+  background:
+    linear-gradient(180deg, rgba(14, 14, 46, 0.55) 0%, rgba(14, 14, 46, 0.15) 60%),
+    #1b1a56 url('/hq-demo/assets/fond-collines-2000.jpg') 50% 64% / cover no-repeat;
+  font-family: 'Inter Tight', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* One gutter from the top, left and right; it runs off the bottom edge, and
+   the app keeps its composer above that crop (--hqw-bleed) */
+.hqw .hqw-win {
+  --hqw-bleed: 40px;
+  position: absolute;
+  top: 28px;
+  left: 28px;
+  width: 704px;
+  height: calc(442px + var(--hqw-bleed));
+  background: rgba(14, 14, 46, 0.42);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.14),
+    0 30px 70px -20px rgba(10, 8, 40, 0.7);
+}
+
+/* On a phone, the app's two panes stacked in one glass sheet: Maestro on
+   top, Chantiers under it, running off the bottom edge */
+.hqw .hqw-pane {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 326px;
+  height: 760px;
+  border-radius: 18px;
+  background: rgba(14, 14, 46, 0.42);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.14),
+    0 24px 60px -20px rgba(10, 8, 40, 0.7);
+  color: var(--hqw-text);
+}
+
+/* No title bar: on a phone the sheet is the app, not a desktop window */
+.hqw .hqw-pane > .ss-window__bar {
+  display: none;
+}
+
+.hqw .hqw-pane .hqw-chat {
+  height: 372px;
+}
+
+.hqw .hqw-win .ss-window__url {
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  color: var(--hqw-text-2);
+}
+
+.hqw .hqw-body {
+  background: rgba(16, 17, 56, 0.86);
+}
+
+.hqw .hqw-app {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) 252px;
+  height: 100%;
+  color: var(--hqw-text);
+}
+
+/* ---- Icon rail ---- */
+
+.hqw .hqw-rail {
+  display: grid;
+  align-content: start;
+  justify-items: center;
+  gap: 6px;
+  padding-top: 14px;
+  border-right: 1px solid var(--hqw-line);
+}
+
+.hqw .hqw-rail__item {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  color: var(--hqw-text-3);
+}
+
+.hqw .hqw-rail__item[data-on] {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--hqw-text);
+}
+
+.hqw .hqw-rail__item[data-on]::before {
+  content: '';
+  position: absolute;
+  left: -11px;
+  top: 9px;
+  width: 3px;
+  height: 16px;
+  border-radius: 2px;
+  background: #ffaa4c;
+}
+
+/* ---- Maestro ---- */
+
+.hqw .hqw-chat {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  min-height: 0;
+  padding: 16px 20px var(--hqw-bleed, 0px);
+}
+
+.hqw .hqw-chat__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--hqw-line);
+}
+
+.hqw .hqw-avatar {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: var(--hqw-text-2);
+}
+
+.hqw .hqw-name {
+  font-family: 'Outfit', var(--ss-font);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 22px;
+}
+
+.hqw .hqw-bar {
+  background: rgba(214, 214, 234, 0.34);
+}
+
+.hqw .hqw-bar--faint {
+  background: rgba(214, 214, 234, 0.2);
+}
+
+.hqw .hqw-bar--gold {
+  background: rgba(255, 203, 143, 0.55);
+}
+
+.hqw .hqw-bar--pill {
+  background: rgba(154, 150, 255, 0.22);
+}
+
+/* The thread sits on the composer: older turns leave over the top edge,
+   fading out before it so nothing is seen sliced */
+.hqw .hqw-thread {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 12px;
+  min-height: 0;
+  overflow: hidden;
+  padding: 16px 0 14px;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 40px);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 40px);
+}
+
+/* Each turn moves as one picture when the thread grows under it */
+.hqw .hqw-thread > * {
+  will-change: transform;
+}
+
+.hqw .hqw-past {
+  display: grid;
+  justify-items: start;
+  gap: 10px;
+}
+
+.hqw .hqw-past__q {
+  justify-self: end;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.hqw .hqw-q {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.hqw .hqw-q > * {
+  padding: 8px 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.12);
+  font-size: 14px;
+  line-height: 19px;
+}
+
+.hqw .hqw-thinking {
+  font-size: 14px;
+  line-height: 19px;
+  color: var(--hqw-text-3);
+}
+
+.hqw .hqw-stream {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--hqw-text);
+}
+
+.hqw .hqw-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.hqw .hqw-tool {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(154, 150, 255, 0.16);
+  border: 1px solid rgba(154, 150, 255, 0.3);
+  color: #e0dfff;
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.hqw .hqw-composer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 0 16px;
+  border-top: 1px solid var(--hqw-line);
+}
+
+.hqw .hqw-field {
+  flex: 1;
+  min-width: 0;
+}
+
+.hqw .hqw-send {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 170, 76, 0.35);
+  color: #2a1600;
+  transition: background-color 0.2s ease;
+}
+
+.hqw .hqw-send[data-ready] {
+  background: #ffaa4c;
+}
+
+/* ---- Chantiers ---- */
+
+.hqw .hqw-side {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  min-height: 0;
+  padding: 16px 14px;
+  border-left: 1px solid var(--hqw-line);
+  background: rgba(10, 10, 40, 0.25);
+}
+
+.hqw .hqw-pane .hqw-side {
+  border-left: 0;
+  border-top: 1px solid var(--hqw-line);
+  padding: 16px 12px;
+}
+
+/* Cards pushed down move as one picture */
+.hqw .hqw-side > * {
+  will-change: transform;
+}
+
+.hqw .hqw-side__head {
+  font-family: 'Outfit', var(--ss-font);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 20px;
+  color: var(--hqw-text-2);
+}
+
+.hqw .hqw-card {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(16, 17, 56, 0.7);
+  border: 1px solid var(--hqw-line);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.hqw .hqw-card--new {
+  border-color: rgba(255, 170, 76, 0.32);
+  transition: border-color 0.4s ease;
+}
+
+.hqw .hqw-card--new[data-status='merged'] {
+  border-color: rgba(154, 150, 255, 0.4);
+}
+
+.hqw .hqw-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.hqw .hqw-card__title {
+  font-family: 'Outfit', var(--ss-font);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.hqw .hqw-pill {
+  display: inline-grid;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  line-height: 17px;
+  border: 1px solid rgba(214, 214, 234, 0.25);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--hqw-text-2);
+  transition: background-color 0.35s ease, border-color 0.35s ease, color 0.35s ease;
+}
+
+.hqw .hqw-pill[data-status='review'] {
+  border-color: rgba(255, 170, 76, 0.45);
+  background: rgba(255, 170, 76, 0.18);
+  color: #ffdcb3;
+}
+
+.hqw .hqw-pill[data-status='merged'] {
+  border-color: rgba(154, 150, 255, 0.5);
+  background: rgba(154, 150, 255, 0.2);
+  color: #e0dfff;
+}
+
+.hqw .hqw-steps {
+  display: grid;
+}
+
+.hqw .hqw-step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 20px;
+}
+
+.hqw .hqw-card__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  opacity: 0.35;
+  transition: opacity 0.35s ease;
+}
+
+.hqw .hqw-card__foot[data-on] {
+  opacity: 1;
+}
+
+.hqw .hqw-pr {
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--hqw-text-2);
+}
+
+.hqw .hqw-merge {
+  position: relative;
+  isolation: isolate;
+  display: inline-grid;
+  place-items: center;
+  height: 30px;
+  padding: 0 14px;
+  border-radius: 999px;
+  color: #2a1600;
+  font-size: 13px;
+  font-weight: 600;
+  transition: color 0.25s ease;
+}
+
+.hqw .hqw-merge__aim {
+  position: absolute;
+  top: 8px;
+  left: 14px;
+  width: 14px;
+  height: 14px;
+}
+
+.hqw .hqw-merge .ss-states__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* A fixed, even label box: the icon beside it lands on a whole pixel */
+.hqw .hqw-merge__label {
+  display: inline-block;
+  width: 70px;
+  text-align: left;
+}
+
+/* Its fill gives under the cursor; the label holds still */
+.hqw .hqw-merge::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background-color: var(--hqw-merge-fill, #ffaa4c);
+  transition: background-color 0.3s ease, transform 0.15s ease;
+}
+
+.hqw .hqw-merge[data-pressed]::before {
+  transform: scale(0.96);
+}
+
+.hqw .hqw-merge[data-phase='done'] {
+  --hqw-merge-fill: rgba(154, 150, 255, 0.24);
+  color: #e0dfff;
+}
+
+.hqw .hqw-merge .ss-check {
+  --ss-success: #9a96ff;
+}
